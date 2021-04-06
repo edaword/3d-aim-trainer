@@ -1,13 +1,14 @@
+package mygame;
 /*
 Asad Jiwani & Edward Wang
 April 5th, 2021
-This class controls the positions for objects in the game. objects have an x, y, and z position
+This class holds 3 values that represent the x, y, and z values of either the dimensions of an object or a position in a 3d space.
  */
 
 public class SpaceDef {
-    private int x;
-    private int y;
-    private int z;
+    private float x;
+    private float y;
+    private float z;
     
     /**
      * Primary constructor - accept new values for all attributes
@@ -15,7 +16,7 @@ public class SpaceDef {
      * @param y - y position of object
      * @param z - Z position of object
      */
-    public SpaceDef(int x, int y, int z){
+    public SpaceDef(float x, float y, float z){
         this.x = x;
         this.y = y;
         this.z = z;
@@ -25,7 +26,7 @@ public class SpaceDef {
      * Set the x position of the object
      * @param x - the x position of the object
      */
-    public void setX(int x){
+    public void setX(float x){
         this.x = x;
     }
     
@@ -33,7 +34,7 @@ public class SpaceDef {
      * Set the y position of the object
      * @param y - the y position of the object
      */
-    public void setY(int y){
+    public void setY(float y){
         this.y = y;
     }
     
@@ -41,7 +42,7 @@ public class SpaceDef {
      * Set the z position of the object
      * @param z - the z position of the object
      */
-    public void setZ(int z){
+    public void setZ(float z){
         this.z = z;
     }
     
@@ -49,7 +50,7 @@ public class SpaceDef {
      * Get the X position of the object
      * @return the X position of the object
      */
-    public int getX(){
+    public float getX(){
         return x;
     }
     
@@ -57,7 +58,7 @@ public class SpaceDef {
      * Get the Y position of the object
      * @return the Y position of the object
      */
-    public int getY(){
+    public float getY(){
         return y;
     }
     
@@ -65,7 +66,7 @@ public class SpaceDef {
      * Get the Z position of the object
      * @return the Z position of the object
      */
-    public int getZ(){
+    public float getZ(){
         return z;
     }
     
@@ -74,7 +75,7 @@ public class SpaceDef {
      * @return a String representation of all positions
      */
     public String toString(){
-        return "X Position: " + x + "\nY Position: " + y + "\nZ Position: " + z;
+        return "X value: " + x + "\nY value: " + y + "\nZ value: " + z;
     }
     
     /**

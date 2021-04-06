@@ -75,6 +75,11 @@ public class BoxTarget extends AbstractTarget{
         return clone;
     }
     
+    public String toString() {
+        String s = "Position: " + pos.toString() + "";
+        return s;
+    }
+    
     /**
      * Check if another box target is equal to the one in this class
      * @param other - the other box target to compare
