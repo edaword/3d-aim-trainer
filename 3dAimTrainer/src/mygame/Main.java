@@ -47,7 +47,7 @@ public class Main extends SimpleApplication implements ActionListener {
     static SpaceDef[][] targetPositions;
     
     public static void main(String[] args) {
-       SpaceDef[][] tempTargetPositions = {{new SpaceDef(4f,3f,-3.5f),new SpaceDef(4f,3f,-2.5f),new SpaceDef(4f,3f,-1.5f),new SpaceDef(4f,3f,-0.5f),new SpaceDef(4f,3f,0.5f),new SpaceDef(4f,3f,1.5f),new SpaceDef(4f,3f,2.5f),new SpaceDef(4f,3f,3.5f)},
+       SpaceDef[][] tempTargetPositions8 = {{new SpaceDef(4f,3f,-3.5f),new SpaceDef(4f,3f,-2.5f),new SpaceDef(4f,3f,-1.5f),new SpaceDef(4f,3f,-0.5f),new SpaceDef(4f,3f,0.5f),new SpaceDef(4f,3f,1.5f),new SpaceDef(4f,3f,2.5f),new SpaceDef(4f,3f,3.5f)},
                                            {new SpaceDef(4f,4f,-3.5f),new SpaceDef(4f,4f,-2.5f),new SpaceDef(4f,4f,-1.5f),new SpaceDef(4f,4f,-0.5f),new SpaceDef(4f,4f,0.5f),new SpaceDef(4f,4f,1.5f),new SpaceDef(4f,4f,2.5f),new SpaceDef(4f,4f,3.5f)}, 
                                            {new SpaceDef(4f,5f,-3.5f),new SpaceDef(4f,5f,-2.5f),new SpaceDef(4f,5f,-1.5f),new SpaceDef(4f,5f,-0.5f),new SpaceDef(4f,5f,0.5f),new SpaceDef(4f,5f,1.5f),new SpaceDef(4f,5f,2.5f),new SpaceDef(4f,5f,3.5f)},
                                            {new SpaceDef(4f,6f,-3.5f),new SpaceDef(4f,6f,-2.5f),new SpaceDef(4f,6f,-1.5f),new SpaceDef(4f,6f,-0.5f),new SpaceDef(4f,6f,0.5f),new SpaceDef(4f,6f,1.5f),new SpaceDef(4f,6f,2.5f),new SpaceDef(4f,6f,3.5f)},
@@ -55,7 +55,12 @@ public class Main extends SimpleApplication implements ActionListener {
                                            {new SpaceDef(4f,8f,-3.5f),new SpaceDef(4f,8f,-2.5f),new SpaceDef(4f,8f,-1.5f),new SpaceDef(4f,8f,-0.5f),new SpaceDef(4f,8f,0.5f),new SpaceDef(4f,8f,1.5f),new SpaceDef(4f,8f,2.5f),new SpaceDef(4f,8f,3.5f)},
                                            {new SpaceDef(4f,9f,-3.5f),new SpaceDef(4f,9f,-2.5f),new SpaceDef(4f,9f,-1.5f),new SpaceDef(4f,9f,-0.5f),new SpaceDef(4f,9f,0.5f),new SpaceDef(4f,9f,1.5f),new SpaceDef(4f,9f,2.5f),new SpaceDef(4f,9f,3.5f)},
                                            {new SpaceDef(4f,10f,-3.5f),new SpaceDef(4f,10f,-2.5f),new SpaceDef(4f,10f,-1.5f),new SpaceDef(4f,10f,-0.5f),new SpaceDef(4f,10f,0.5f),new SpaceDef(4f,10f,1.5f),new SpaceDef(4f,10f,2.5f),new SpaceDef(4f,10f,3.5f)}};
-       targetPositions = tempTargetPositions;
+       SpaceDef[][] tempTargetPositions5 = {{new SpaceDef(20f,3f,-2),new SpaceDef(20f,3f,-1),new SpaceDef(20f,3f,0),new SpaceDef(20f,3f,1)},{new SpaceDef(20f,3f,2)},
+                                           {new SpaceDef(20f,4f,-2),new SpaceDef(20f,4f,-1),new SpaceDef(20f,4f,0),new SpaceDef(20f,4f,1)},{new SpaceDef(20f,4f,2)},
+                                           {new SpaceDef(20f,5f,-2),new SpaceDef(20f,5f,-1),new SpaceDef(20f,5f,0),new SpaceDef(20f,5f,1)},{new SpaceDef(20f,5f,2)},
+                                           {new SpaceDef(20f,6f,-2),new SpaceDef(20f,6f,-1),new SpaceDef(20f,6f,0),new SpaceDef(20f,6f,1)},{new SpaceDef(20f,6f,2)},
+                                           {new SpaceDef(20f,7f,-2),new SpaceDef(20f,7f,-1),new SpaceDef(20f,7f,0),new SpaceDef(20f,7f,1)},{new SpaceDef(20f,7f,2)},    };
+       targetPositions = tempTargetPositions5;
         
        Main app = new Main();
         app.start();
