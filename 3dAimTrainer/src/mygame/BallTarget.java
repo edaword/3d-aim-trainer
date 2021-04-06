@@ -1,3 +1,5 @@
+package mygame;
+
 /*
 Asad Jiwani & Edward Wang
 April 5th, 2021
@@ -6,4 +8,12 @@ A target has a position, dimensions, a boolean that controls whether it is hit, 
  */
 
 public class BallTarget extends AbstractTarget{
+    BallTarget() {
+        
+    }
+    
+    public BallTarget clone() {
+        BallTarget b1 = new BallTarget();
+        return b1;
+    }
 }

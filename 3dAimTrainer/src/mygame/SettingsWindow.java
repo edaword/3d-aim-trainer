@@ -1,3 +1,4 @@
+package mygame;
 /*
 Asad Jiwani & Edward Wang
 April 2nd 2021

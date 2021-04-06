@@ -1,4 +1,4 @@
-
+package mygame;
 import com.jme3.math.ColorRGBA;
 
 /*
