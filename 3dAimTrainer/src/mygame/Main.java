@@ -47,8 +47,14 @@ public class Main extends SimpleApplication implements ActionListener {
     static SpaceDef[][] targetPositions;
     
     public static void main(String[] args) {
-       SpaceDef[][] tempTargetPositions = {{new SpaceDef(4f,4f,-3.5f),new SpaceDef(4f,4f,-2.5f),new SpaceDef(4f,4f,-1.5f),new SpaceDef(4f,4f,-0.5f),new SpaceDef(4f,4f,0.5f),new SpaceDef(4f,4f,1.5f),new SpaceDef(4f,4f,2.5f),new SpaceDef(4f,4f,3.5f)}, 
-                                           {new SpaceDef(4f,5f,-3.5f),new SpaceDef(4f,5f,-2.5f),new SpaceDef(4f,5f,-1.5f),new SpaceDef(4f,5f,-0.5f),new SpaceDef(4f,5f,0.5f),new SpaceDef(4f,5f,1.5f),new SpaceDef(4f,5f,2.5f),new SpaceDef(4f,5f,3.5f)}  };
+       SpaceDef[][] tempTargetPositions = {{new SpaceDef(4f,3f,-3.5f),new SpaceDef(4f,3f,-2.5f),new SpaceDef(4f,3f,-1.5f),new SpaceDef(4f,3f,-0.5f),new SpaceDef(4f,3f,0.5f),new SpaceDef(4f,3f,1.5f),new SpaceDef(4f,3f,2.5f),new SpaceDef(4f,3f,3.5f)},
+                                           {new SpaceDef(4f,4f,-3.5f),new SpaceDef(4f,4f,-2.5f),new SpaceDef(4f,4f,-1.5f),new SpaceDef(4f,4f,-0.5f),new SpaceDef(4f,4f,0.5f),new SpaceDef(4f,4f,1.5f),new SpaceDef(4f,4f,2.5f),new SpaceDef(4f,4f,3.5f)}, 
+                                           {new SpaceDef(4f,5f,-3.5f),new SpaceDef(4f,5f,-2.5f),new SpaceDef(4f,5f,-1.5f),new SpaceDef(4f,5f,-0.5f),new SpaceDef(4f,5f,0.5f),new SpaceDef(4f,5f,1.5f),new SpaceDef(4f,5f,2.5f),new SpaceDef(4f,5f,3.5f)},
+                                           {new SpaceDef(4f,6f,-3.5f),new SpaceDef(4f,6f,-2.5f),new SpaceDef(4f,6f,-1.5f),new SpaceDef(4f,6f,-0.5f),new SpaceDef(4f,6f,0.5f),new SpaceDef(4f,6f,1.5f),new SpaceDef(4f,6f,2.5f),new SpaceDef(4f,6f,3.5f)},
+                                           {new SpaceDef(4f,7f,-3.5f),new SpaceDef(4f,7f,-2.5f),new SpaceDef(4f,7f,-1.5f),new SpaceDef(4f,7f,-0.5f),new SpaceDef(4f,7f,0.5f),new SpaceDef(4f,7f,1.5f),new SpaceDef(4f,7f,2.5f),new SpaceDef(4f,7f,3.5f)},
+                                           {new SpaceDef(4f,8f,-3.5f),new SpaceDef(4f,8f,-2.5f),new SpaceDef(4f,8f,-1.5f),new SpaceDef(4f,8f,-0.5f),new SpaceDef(4f,8f,0.5f),new SpaceDef(4f,8f,1.5f),new SpaceDef(4f,8f,2.5f),new SpaceDef(4f,8f,3.5f)},
+                                           {new SpaceDef(4f,9f,-3.5f),new SpaceDef(4f,9f,-2.5f),new SpaceDef(4f,9f,-1.5f),new SpaceDef(4f,9f,-0.5f),new SpaceDef(4f,9f,0.5f),new SpaceDef(4f,9f,1.5f),new SpaceDef(4f,9f,2.5f),new SpaceDef(4f,9f,3.5f)},
+                                           {new SpaceDef(4f,10f,-3.5f),new SpaceDef(4f,10f,-2.5f),new SpaceDef(4f,10f,-1.5f),new SpaceDef(4f,10f,-0.5f),new SpaceDef(4f,10f,0.5f),new SpaceDef(4f,10f,1.5f),new SpaceDef(4f,10f,2.5f),new SpaceDef(4f,10f,3.5f)}};
        targetPositions = tempTargetPositions;
         
        Main app = new Main();
@@ -215,7 +221,7 @@ public class Main extends SimpleApplication implements ActionListener {
 
     /** A cube object for target practice */
     protected Geometry makeCube(String name, SpaceDef pos) {
-        Box box = new Box(1, 1, 1);
+        Box box = new Box(0.5f, 0.5f, 0.5f);
         Geometry cube = new Geometry(name, box);
         cube.setLocalTranslation(pos.getX(), pos.getY(), pos.getZ());
         Material mat1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");

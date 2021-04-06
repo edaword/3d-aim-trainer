@@ -5,7 +5,7 @@ import com.jme3.scene.shape.Box;
 
 /*
 Asad Jiwani & Edward Wang
-April 6th, 2021
+April 5th, 2021
 This class extend the abstract class for a game target and creates a box target. 
 A target has a position, dimensions, a boolean that controls whether it is hit, and a color
  */
@@ -47,7 +47,24 @@ public class BoxTarget extends AbstractTarget{
     public SpaceDef getDimensions(){
         return dimensions;
     }
-     
+    
+    /**
+     * Set the position for the target
+     * @param pos - the position for the target
+     */
+    public void setPos(SpaceDef pos){
+        this.pos = pos;
+    }
+    
+    /**
+     * Get the position for the target
+     * @return the position for the target
+     */
+    @Override
+    public SpaceDef getPos(){
+        return pos;
+    }
+    
     /**
      * Create a new box target with same attributes as this one
      * @return a new box target with same attributes as this one

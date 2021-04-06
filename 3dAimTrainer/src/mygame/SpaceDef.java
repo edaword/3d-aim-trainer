@@ -1,3 +1,4 @@
+package mygame;
 /*
 Asad Jiwani & Edward Wang
 April 5th, 2021
@@ -5,9 +6,9 @@ This class controls the positions for objects in the game. objects have an x, y,
  */
 
 public class SpaceDef {
-    private int x;
-    private int y;
-    private int z;
+    private float x;
+    private float y;
+    private float z;
     
     /**
      * Primary constructor - accept new values for all attributes
@@ -15,7 +16,7 @@ public class SpaceDef {
      * @param y - y position of object
      * @param z - Z position of object
      */
-    public SpaceDef(int x, int y, int z){
+    public SpaceDef(float x, float y, float z){
         this.x = x;
         this.y = y;
         this.z = z;
@@ -49,7 +50,7 @@ public class SpaceDef {
      * Get the X position of the object
      * @return the X position of the object
      */
-    public int getX(){
+    public float getX(){
         return x;
     }
     
@@ -57,7 +58,7 @@ public class SpaceDef {
      * Get the Y position of the object
      * @return the Y position of the object
      */
-    public int getY(){
+    public float getY(){
         return y;
     }
     
@@ -65,7 +66,7 @@ public class SpaceDef {
      * Get the Z position of the object
      * @return the Z position of the object
      */
-    public int getZ(){
+    public float getZ(){
         return z;
     }
     
