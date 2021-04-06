@@ -1,11 +1,11 @@
 package mygame;
-import java.util.ArrayList;
 
 /*
 Asad Jiwani & Edward Wang
 April 2nd 2021
 This is a GUI for the game's introduction screen
  */
+import java.util.ArrayList;
 
 public class IntroWindow extends javax.swing.JFrame {
 
@@ -162,8 +162,8 @@ public class IntroWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCreditsActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
-        //end the program
-        System.exit(0);
+        //hide this window
+        this.setVisible(false);
     }//GEN-LAST:event_btnExitActionPerformed
 
     private void btnStatsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStatsActionPerformed
