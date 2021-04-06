@@ -6,7 +6,7 @@ the number of shots fired and the player accuracy
  */
 import java.util.Date;
 
-public class StatEntry {
+public class StatEntry implements Comparable<StatEntry>{
     private long dateInMilliseconds;
     private int targetsHit;
     private int shotsFired;
@@ -119,4 +119,14 @@ public class StatEntry {
                 this.accuracy == other.accuracy;
     }
     
+    @Override
+    /**
+     * Compare two stat entries based on their accuracy
+     * @return A negative num if the stat entry is less than the one being passed as a parameter
+     *          zero if this stat entry is equal to the one being passed
+     *          a positive num if this stat entry is greater than the one being passed
+     */
+    public int compareTo(StatEntry other){
+        return (int) Math.round(this.getAccuracy() - other.getAccuracy());
+    }
 }

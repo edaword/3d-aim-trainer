@@ -72,10 +72,20 @@ public abstract class AbstractTarget {
     }
     
     /**
+     * Set the position for the target
+     * @param pos - the position for the target
+     */
+    public void setPos(SpaceDef pos){
+        this.pos = pos;
+    }
+    
+    /**
      * Get the dimensions of the target
      * @return the dimensions of the target
      */
-    public abstract SpaceDef getDimensions();
+    public SpaceDef getDimensions(){
+        return dimensions;
+    }
     
     /**
      * Create a String representation of all attributes
@@ -84,10 +94,4 @@ public abstract class AbstractTarget {
     public String toString(){
         return "Positions: " + pos + "Dimensions: " + dimensions + "Color: " + color + "Hit: " + hit;
     }
-    
-    /**
-     * Create a new Target with same attributes as this one
-     * @return a new Target with same attributes as this one
-     */
-    public abstract AbstractTarget clone();
 }
