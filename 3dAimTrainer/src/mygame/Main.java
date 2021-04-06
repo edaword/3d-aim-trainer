@@ -7,18 +7,29 @@ import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
+import com.jme3.collision.CollisionResult;
+import com.jme3.collision.CollisionResults;
+import com.jme3.font.BitmapText;
 import com.jme3.input.KeyInput;
+import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.MouseButtonTrigger;
+import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Box;
+import com.jme3.scene.shape.Sphere;
+import com.jme3.scene.Spatial.CullHint;
 import com.jme3.renderer.RenderManager;
 
-
+ 
 public class Main extends SimpleApplication implements ActionListener {
-    
+    //test s
     private Spatial sceneModel;
     private BulletAppState bulletAppState;
     private RigidBodyControl landscape;
@@ -31,13 +42,26 @@ public class Main extends SimpleApplication implements ActionListener {
     private Vector3f camDir = new Vector3f();
     private Vector3f camLeft = new Vector3f();
     
+    static int[][] test = {{1,2},{3,4}};
+    
+    static SpaceDef[][] targetPositions;
+    
     public static void main(String[] args) {
-        Main app = new Main();
+       SpaceDef[][] tempTargetPositions = {{new SpaceDef(4f,4f,-3.5f),new SpaceDef(4f,4f,-2.5f),new SpaceDef(4f,4f,-1.5f),new SpaceDef(4f,4f,-0.5f),new SpaceDef(4f,4f,0.5f),new SpaceDef(4f,4f,1.5f),new SpaceDef(4f,4f,2.5f),new SpaceDef(4f,4f,3.5f)}, 
+                                           {new SpaceDef(4f,5f,-3.5f),new SpaceDef(4f,5f,-2.5f),new SpaceDef(4f,5f,-1.5f),new SpaceDef(4f,5f,-0.5f),new SpaceDef(4f,5f,0.5f),new SpaceDef(4f,5f,1.5f),new SpaceDef(4f,5f,2.5f),new SpaceDef(4f,5f,3.5f)}  };
+       targetPositions = tempTargetPositions;
+        
+       Main app = new Main();
         app.start();
     }
+    
+    //node to hold spatials that can be shot
+    private Node shootables;
 
     @Override
     public void simpleInitApp() {
+
+        
         /** Set up Physics */
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
@@ -47,6 +71,7 @@ public class Main extends SimpleApplication implements ActionListener {
         // We re-use the flyby camera for rotation, while positioning is handled by physics
         viewPort.setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
         flyCam.setMoveSpeed(100);
+        initCrossHairs(); // a "+" in the middle of the screen to help aiming
         setUpKeys(); 
     //light is already done
 //        setUpLight();
@@ -67,6 +92,18 @@ public class Main extends SimpleApplication implements ActionListener {
         
         player.setGravity(new Vector3f(0,-30f,0));
         player.setPhysicsLocation(new Vector3f(0,10,0));
+        
+        shootables = new Node("Shootables");
+        rootNode.attachChild(shootables);
+        drawTargets();
+    }
+    
+    private void drawTargets() {
+        for (SpaceDef[] outer : targetPositions) {
+            for (SpaceDef pos : outer) {
+                shootables.attachChild(makeCube("e", pos));
+            }
+        }
     }
 
     /** We over-write some navigational key mappings here, so we can
@@ -77,11 +114,14 @@ public class Main extends SimpleApplication implements ActionListener {
     inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
     inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
     inputManager.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
+    inputManager.addMapping("Shoot", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        
     inputManager.addListener(this, "Left");
     inputManager.addListener(this, "Right");
     inputManager.addListener(this, "Up");
     inputManager.addListener(this, "Down");
     inputManager.addListener(this, "Jump");
+    inputManager.addListener(this, "Shoot");
   }
 
   /** These are our custom actions triggered by key presses.
@@ -97,6 +137,30 @@ public class Main extends SimpleApplication implements ActionListener {
       down = isPressed;
     } else if (binding.equals("Jump")) {
       if (isPressed) { player.jump(new Vector3f(0,20f,0));}
+    } else if (binding.equals("Shoot") && !isPressed) {
+        // 1. Reset results list. CollisionResults is an arrayList of objects 
+        //    of type CollisionResult
+        CollisionResults results = new CollisionResults();
+        // 2. Draw a ray from the camera location in the camera direction
+        Ray ray = new Ray(cam.getLocation(), cam.getDirection());
+        // 3. Collect intersections between Ray and Shootables in results list.
+        shootables.collideWith(ray, results);
+        // 4. Print the results
+        System.out.println("----- Collisions? " + results.size() + "-----");
+        for (int i = 0; i < results.size(); i++) {
+          // For each hit, we know distance, impact point, name of geometry.
+          float dist = results.getCollision(i).getDistance();
+          Vector3f pt = results.getCollision(i).getContactPoint();
+          String hit = results.getCollision(i).getGeometry().getName();
+          System.out.println("* Collision #" + i);
+          System.out.println("  You shot " + hit + " at " + pt + ", " + dist + " wu away.");
+        }
+        // 5. Use the results (we mark the hit object)
+        if (results.size() > 0) {
+          // The closest collision point is what was truly hit:
+          CollisionResult closest = results.getClosestCollision();
+          closest.getGeometry().setCullHint(CullHint.Always);
+        }
     }
   }
 
@@ -132,4 +196,29 @@ public class Main extends SimpleApplication implements ActionListener {
     public void simpleRender(RenderManager rm) {
         //TODO: add render code
     }
+    
+    /** A centered plus sign to help the player aim. */
+    protected void initCrossHairs() {
+        setDisplayStatView(false);
+        guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
+        BitmapText ch = new BitmapText(guiFont, false);
+        ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
+        ch.setText("+"); // crosshairs
+        ch.setLocalTranslation( // center
+          settings.getWidth() / 2 - ch.getLineWidth()/2,
+          settings.getHeight() / 2 + ch.getLineHeight()/2, 0);
+        guiNode.attachChild(ch);
+    }
+
+    /** A cube object for target practice */
+    protected Geometry makeCube(String name, SpaceDef pos) {
+        Box box = new Box(1, 1, 1);
+        Geometry cube = new Geometry(name, box);
+        cube.setLocalTranslation(pos.getX(), pos.getY(), pos.getZ());
+        Material mat1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat1.setColor("Color", ColorRGBA.randomColor());
+        cube.setMaterial(mat1);
+        return cube;
+    }
+
 }
