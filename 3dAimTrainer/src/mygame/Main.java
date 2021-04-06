@@ -175,6 +175,9 @@ public class Main extends SimpleApplication implements ActionListener {
     public void simpleUpdate(float tpf) {
         camDir.set(cam.getDirection()).multLocal(0.6f);
         camLeft.set(cam.getLeft()).multLocal(0.4f);
+        //prevents user from flying (walking in the vertical direction)
+        camDir.setY(0);
+        camLeft.setY(0);
         walkDirection.set(0, 0, 0);
         if (left) {
             walkDirection.addLocal(camLeft);
