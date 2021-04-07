@@ -63,12 +63,15 @@ public class Main extends SimpleApplication implements ActionListener {
                                            {new SpaceDef(4f,8f,-3.5f),new SpaceDef(4f,8f,-2.5f),new SpaceDef(4f,8f,-1.5f),new SpaceDef(4f,8f,-0.5f),new SpaceDef(4f,8f,0.5f),new SpaceDef(4f,8f,1.5f),new SpaceDef(4f,8f,2.5f),new SpaceDef(4f,8f,3.5f)},
                                            {new SpaceDef(4f,9f,-3.5f),new SpaceDef(4f,9f,-2.5f),new SpaceDef(4f,9f,-1.5f),new SpaceDef(4f,9f,-0.5f),new SpaceDef(4f,9f,0.5f),new SpaceDef(4f,9f,1.5f),new SpaceDef(4f,9f,2.5f),new SpaceDef(4f,9f,3.5f)},
                                            {new SpaceDef(4f,10f,-3.5f),new SpaceDef(4f,10f,-2.5f),new SpaceDef(4f,10f,-1.5f),new SpaceDef(4f,10f,-0.5f),new SpaceDef(4f,10f,0.5f),new SpaceDef(4f,10f,1.5f),new SpaceDef(4f,10f,2.5f),new SpaceDef(4f,10f,3.5f)}};
-       SpaceDef[][] tempTargetPositions5 = {{new SpaceDef(20f,3f,-2),new SpaceDef(20f,3f,-1),new SpaceDef(20f,3f,0),new SpaceDef(20f,3f,1)},{new SpaceDef(20f,3f,2)},
-                                           {new SpaceDef(20f,4f,-2),new SpaceDef(20f,4f,-1),new SpaceDef(20f,4f,0),new SpaceDef(20f,4f,1)},{new SpaceDef(20f,4f,2)},
-                                           {new SpaceDef(20f,5f,-2),new SpaceDef(20f,5f,-1),new SpaceDef(20f,5f,0),new SpaceDef(20f,5f,1)},{new SpaceDef(20f,5f,2)},
-                                           {new SpaceDef(20f,6f,-2),new SpaceDef(20f,6f,-1),new SpaceDef(20f,6f,0),new SpaceDef(20f,6f,1)},{new SpaceDef(20f,6f,2)},
-                                           {new SpaceDef(20f,7f,-2),new SpaceDef(20f,7f,-1),new SpaceDef(20f,7f,0),new SpaceDef(20f,7f,1)},{new SpaceDef(20f,7f,2)},    };
-       targetPositions = tempTargetPositions5;
+       SpaceDef[][] tempTargetPositions5 = {
+                                            {new SpaceDef(20f,3f,-2),new SpaceDef(20f,3f,-1),new SpaceDef(20f,3f,0),new SpaceDef(20f,3f,1),new SpaceDef(20f,3f,2)},
+                                            {new SpaceDef(20f,4f,-2),new SpaceDef(20f,4f,-1),new SpaceDef(20f,4f,0),new SpaceDef(20f,4f,1),new SpaceDef(20f,4f,2)},
+                                            {new SpaceDef(20f,5f,-2),new SpaceDef(20f,5f,-1),new SpaceDef(20f,5f,0),new SpaceDef(20f,5f,1),new SpaceDef(20f,5f,2)},
+                                            {new SpaceDef(20f,6f,-2),new SpaceDef(20f,6f,-1),new SpaceDef(20f,6f,0),new SpaceDef(20f,6f,1),new SpaceDef(20f,6f,2)},
+                                            {new SpaceDef(20f,7f,-2),new SpaceDef(20f,7f,-1),new SpaceDef(20f,7f,0),new SpaceDef(20f,7f,1),new SpaceDef(20f,7f,2)},    
+                                           };
+                            
+           targetPositions = tempTargetPositions5;
         
        Main app = new Main();
         app.start();
@@ -116,15 +119,8 @@ public class Main extends SimpleApplication implements ActionListener {
         
         shootables = new Node("Shootables");
         rootNode.attachChild(shootables);
-        drawTargets();
-    }
-    
-    private void drawTargets() {
-        for (SpaceDef[] outer : targetPositions) {
-            for (SpaceDef pos : outer) {
-                shootables.attachChild(makeCube("e", pos));
-            }
-        }
+        //start with a single target in the middle
+        shootables.attachChild(makeCube("original", targetPositions[2][2]));
     }
 
     /** We over-write some navigational key mappings here, so we can
@@ -206,13 +202,18 @@ public class Main extends SimpleApplication implements ActionListener {
           CollisionResult closest = results.getClosestCollision();
           //remove it from shootables
           shootables.detachChild(closest.getGeometry());
-          
+          newTarget();
         }
     }
   }
   
   public void newTarget() {
+      int xPos, yPos;
+      System.out.println(targetPositions.length);
+      xPos = (int) (Math.random() * (targetPositions.length));
+      yPos = (int) (Math.random() * (targetPositions.length));
       
+      shootables.attachChild(makeCube("target", targetPositions[xPos][yPos]));
   }
 
   /**
