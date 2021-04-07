@@ -1,6 +1,8 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.audio.AudioData.DataType;
+import com.jme3.audio.AudioNode;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
@@ -23,8 +25,6 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
-import com.jme3.scene.shape.Sphere;
-import com.jme3.scene.Spatial.CullHint;
 import com.jme3.renderer.RenderManager;
 
  
@@ -37,7 +37,11 @@ public class Main extends SimpleApplication implements ActionListener {
     private CharacterControl player;
     private Vector3f walkDirection = new Vector3f();
     private boolean left = false, right = false, up = false, down = false;
-    
+    //declare counter variables
+    int targetsHit, numShots;
+    //create AudioNodes for sound effects
+    private AudioNode gunshot;
+    private AudioNode ding;
     //Temporary vectors used on each frame.
     //They here to avoid instanciating new vectors on each frame
     private Vector3f camDir = new Vector3f();
@@ -84,7 +88,9 @@ public class Main extends SimpleApplication implements ActionListener {
         viewPort.setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
         flyCam.setMoveSpeed(100);
         initCrossHairs(); // a "+" in the middle of the screen to help aiming
-        setUpKeys(); 
+        setUpKeys();
+        //invoke method to initialize the audio soundeffects
+        initAudio();
     //light is already done
 //        setUpLight();
 
@@ -136,6 +142,23 @@ public class Main extends SimpleApplication implements ActionListener {
     inputManager.addListener(this, "Shoot");
   }
 
+  /**
+   * Initialize all the aduio sounds for the game
+   */
+  private void initAudio(){
+      gunshot = new AudioNode(assetManager, "Sound/gunshot.wav", DataType.Buffer);
+      gunshot.setPositional(false);
+      gunshot.setLooping(false);
+      gunshot.setVolume(2);
+      rootNode.attachChild(gunshot);
+      
+      ding = new AudioNode(assetManager, "Sound/ding.wav", DataType.Buffer);
+      ding.setPositional(false);
+      ding.setLooping(false);
+      ding.setVolume(2);
+      rootNode.attachChild(ding);
+  }
+  
   /** These are our custom actions triggered by key presses.
    * We do not walk yet, we just keep track of the direction the user pressed. */
   public void onAction(String binding, boolean isPressed, float tpf) {
@@ -150,6 +173,10 @@ public class Main extends SimpleApplication implements ActionListener {
     } else if (binding.equals("Jump")) {
       if (isPressed) { player.jump(new Vector3f(0,20f,0));}
     } else if (binding.equals("Shoot") && !isPressed) {
+        //play the gunshot sound
+        gunshot.playInstance();
+        //add one to the total shots counter
+        numShots++;
         // 1. Reset results list. CollisionResults is an arrayList of objects 
         //    of type CollisionResult
         CollisionResults results = new CollisionResults();
@@ -169,6 +196,9 @@ public class Main extends SimpleApplication implements ActionListener {
         }
         // 5. If something was hit
         if (results.size() > 0) {
+          ding.playInstance(); //play ding sound effect
+          //add one to the num targets hit counter
+          targetsHit++;
           // The closest collision point is what was truly hit:
           CollisionResult closest = results.getClosestCollision();
           //remove it from shootables
