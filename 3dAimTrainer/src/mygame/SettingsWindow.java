@@ -263,7 +263,7 @@ public class SettingsWindow extends javax.swing.JFrame {
         //create variables for all setting attributes
         String sBackgroundColor, sTargetColor, sCrosshairColor;
         String[] backgroundColors, targetColors, crosshairColors;
-        double  backgroundA = 0.9, targetA = 0.9, crosshairA = 0.9; 
+        double  backgroundA = 0.3, targetA = 0.3, crosshairA = 0.3; 
         int backgroundR, backgroundG, backgroundB,
                 targetR, targetG, targetB,
                 crosshairR, crosshairG, crosshairB;
