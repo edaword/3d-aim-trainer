@@ -78,7 +78,7 @@
                                           <Component id="txtFieldBackgroundColor" alignment="0" min="-2" pref="45" max="-2" attributes="0"/>
                                           <Component id="txtFieldTargetColor" alignment="0" min="-2" pref="45" max="-2" attributes="0"/>
                                           <Component id="txtFieldCrosshairColor" min="-2" pref="45" max="-2" attributes="0"/>
-                                          <Component id="jComboBox1" min="-2" max="-2" attributes="0"/>
+                                          <Component id="comboBoxCrosshairShape" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -127,7 +127,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel13" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jComboBox1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="comboBoxCrosshairShape" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -355,7 +355,7 @@
         <Property name="text" type="java.lang.String" value="For all color settings, enter values seperated by a space. Ex. 255 255 255"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JComboBox" name="jComboBox1">
+    <Component class="javax.swing.JComboBox" name="comboBoxCrosshairShape">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="cc" red="cc" type="rgb"/>

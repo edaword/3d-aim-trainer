@@ -8,6 +8,14 @@ import com.jme3.math.ColorRGBA;
 
 public class SettingsWindow extends javax.swing.JFrame {
 
+    //create global variable for the crosshair index
+    static int crosshairIndex;
+    //create global variables for the colors that the user chose
+    static ColorRGBA backgroundColor, targetColor, crosshairColor;
+    static int backgroundR, backgroundG, backgroundB,
+                targetR, targetG, targetB,
+                crosshairR, crosshairG, crosshairB;
+    static double  backgroundA = 0.3, targetA = 0.3, crosshairA = 0.3; 
     //create an intro window variable
     private IntroWindow intro;
     /**
@@ -52,7 +60,7 @@ public class SettingsWindow extends javax.swing.JFrame {
         btnBack = new javax.swing.JButton();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        comboBoxCrosshairShape = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 0, 0));
@@ -143,8 +151,8 @@ public class SettingsWindow extends javax.swing.JFrame {
 
         jLabel18.setText("For all color settings, enter values seperated by a space. Ex. 255 255 255");
 
-        jComboBox1.setBackground(new java.awt.Color(204, 204, 255));
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "+", "o" }));
+        comboBoxCrosshairShape.setBackground(new java.awt.Color(204, 204, 255));
+        comboBoxCrosshairShape.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "+", "o" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -195,7 +203,7 @@ public class SettingsWindow extends javax.swing.JFrame {
                                             .addComponent(txtFieldBackgroundColor, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(txtFieldTargetColor, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(txtFieldCrosshairColor, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                            .addComponent(comboBoxCrosshairShape, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                             .addComponent(jLabel15)
                             .addComponent(jLabel7)
                             .addComponent(jLabel18))
@@ -231,7 +239,7 @@ public class SettingsWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(jLabel13)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(comboBoxCrosshairShape, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
@@ -263,11 +271,9 @@ public class SettingsWindow extends javax.swing.JFrame {
         //create variables for all setting attributes
         String sBackgroundColor, sTargetColor, sCrosshairColor;
         String[] backgroundColors, targetColors, crosshairColors;
-        double  backgroundA = 0.3, targetA = 0.3, crosshairA = 0.3; 
-        int backgroundR, backgroundG, backgroundB,
-                targetR, targetG, targetB,
-                crosshairR, crosshairG, crosshairB;
-        ColorRGBA backgroundColor, targetColor, crosshairColor;
+        
+        
+        
         //get background color as a String
         sBackgroundColor = txtFieldBackgroundColor.getText();
         //use the split method and get all 3 rgb values in the String color variable
@@ -331,6 +337,9 @@ public class SettingsWindow extends javax.swing.JFrame {
         for (int i = 0; i < 3; i++) {
             System.out.println(backgroundColors[i] + " " + targetColors[i] + " " + crosshairColors[i]);
         }
+        //get the index of the shape that the user selected for the crosshair
+        //index 0 is + and index 1 is o
+        crosshairIndex = comboBoxCrosshairShape.getSelectedIndex();
     }//GEN-LAST:event_btnApplyActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
@@ -341,12 +350,132 @@ public class SettingsWindow extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
 
+    /**
+     * Get the crosshair index that the user choose in the combo box
+     * @return the crosshair index that the user choose in the combo box
+     */
+    public static int getCrosshairIndex(){
+            return crosshairIndex;
+    }
+    
+    /**
+     * Get the r value for the background color the user chose
+     * @return the r value for the background color the user chose
+     */
+    public static int getBR(){
+        return backgroundR;
+    }
+    
+    /**
+     * Get the g value for the background color the user chose
+     * @return the g value for the background color the user chose
+     */
+    public static int getBG(){
+        return backgroundG;
+    }
+    
+    /**
+     * Get the b value for the background color the user chose
+     * @return the b value for the background color the user chose
+     */
+    public static int getBB(){
+        return backgroundB;
+    }
+    
+    /**
+     * Get the a value for the background color the user chose
+     * @return the a value for the background color the user chose
+     */
+    public static double getBA(){
+        return backgroundA;
+    }
+    
+    /**
+     * Get the r value for the target color the user chose
+     * @return the r value for the target color the user chose
+     */
+    public static int getTR(){
+        return targetR;
+    }
+    
+    /**
+     * Get the g value for the target color the user chose
+     * @return the g value for the target color the user chose
+     */
+    public static int getTG(){
+        return targetG;
+    }
+    
+    /**
+     * Get the b value for the target color the user chose
+     * @return the b value for the target color the user chose
+     */
+    public static int getTB(){
+        return targetB;
+    }
+    
+    /**
+     * Get the a value for the target color the user chose
+     * @return the a value for the target color the user chose
+     */
+    public static double getTA(){
+        return targetA;
+    }
+    
+    /**
+     * Get the r value for the crosshair color the user chose
+     * @return the r value for the crosshair color the user chose
+     */
+    public static int getCR(){
+        return crosshairR;
+    }
+    
+    /**
+     * Get the g value for the crosshair color the user chose
+     * @return the g value for the crosshair color the user chose
+     */
+    public static int getCG(){
+        return crosshairG;
+    }
+    
+    /**
+     * Get the b value for the crosshair color the user chose
+     * @return the b value for the crosshair color the user chose
+     */
+    public static int getCB(){
+        return crosshairB;
+    }
+    
+    /**
+     * Get the a value for the crosshair color the user chose
+     * @return the a value for the crosshair color the user chose
+     */
+    public static double getCA(){
+        return crosshairA;
+    }
+    
+    
+    /**
+     * Get the color that the user chose for the targets
+     * @return the color that the user chose for the targets
+     */
+    public static ColorRGBA getTargetColor(){
+        return targetColor;
+    }
+    
+    /**
+     * Get the color that the user chose for the crosshair
+     * @return the color that the user chose for the crosshair
+     */
+    public static ColorRGBA getCrosshairColor(){
+        return crosshairColor;
+    }
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnApply;
     private javax.swing.JButton btnBack;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> comboBoxCrosshairShape;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

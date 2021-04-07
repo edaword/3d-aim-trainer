@@ -45,6 +45,13 @@ public class Main extends SimpleApplication implements ActionListener {
     private AudioNode ding;
     //declare variable for the crosshair shape
     int crosshairIndex;
+    //create color variables for the colors that the user chose in the settings GUI
+    ColorRGBA backgroundColor = new ColorRGBA(SettingsWindow.getBR(), SettingsWindow.getBG(), 
+    SettingsWindow.getBB(), ((float)SettingsWindow.getBA()));
+    ColorRGBA targetColor = new ColorRGBA(SettingsWindow.getTR(), SettingsWindow.getTG(), 
+    SettingsWindow.getTB(), ((float)SettingsWindow.getTA()));
+    ColorRGBA crosshairColor = new ColorRGBA(SettingsWindow.getCR(), SettingsWindow.getCG(), 
+    SettingsWindow.getCB(), ((float)SettingsWindow.getCA()));
     //Temporary vectors used on each frame.
     //They here to avoid instanciating new vectors on each frame
     private Vector3f camDir = new Vector3f();
