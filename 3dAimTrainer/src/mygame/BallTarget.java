@@ -19,6 +19,12 @@ public class BallTarget extends AbstractTarget{
     private int radialSamples;
     private SpaceDef pos;
     
+    /**
+     * Primary constructor - accept new values for the position, radius, and color of the target
+     * @param pos - the position of the target
+     * @param radius - the radiius of the target
+     * @param color - the color of the target
+     */
     public BallTarget(SpaceDef pos, float radius, ColorRGBA color) {
         this.pos = pos;
         this.radius = radius;
@@ -28,6 +34,15 @@ public class BallTarget extends AbstractTarget{
         ball = new Sphere(zSamples, radialSamples, radius);
     }
     
+    /**
+     * Secondary constructor - accept new values for the position, radius, z position, radial, 
+     * and color of the target
+     * @param pos - the position of the target
+     * @param radius - the radiius of the target
+     * @param zSamples - the z position of the target
+     * @param radialSamples - the radial of the target
+     * @param color - the color of the target
+     */
     public BallTarget(SpaceDef pos, float radius, int zSamples, int radialSamples, ColorRGBA color) {
         this(pos, radius, color);
 	this.zSamples = zSamples;
@@ -37,35 +52,67 @@ public class BallTarget extends AbstractTarget{
 	ball1.setLocalTranslation(pos.getX(),pos.getY(),pos.getZ());
     }
         
+    /**
+     * Set the radius of the target
+     * @param radius - the radius of the target
+     */
     public void setRadius(float radius) {
         this.radius = radius;
     }
     
+    /**
+     * Set the z position of the target
+     * @param zSamples - the z position of the target
+     */
     public void setZSamples(int zSamples) {
         this.zSamples = zSamples;
     }
     
+    /**
+     * Set the radial of the target
+     * @param radialSamples - the radial of the target
+     */
     public void setRadialSamples(int radialSamples) {
         this.radialSamples = radialSamples;
     }
     
+    /**
+     * Get the radius of the target
+     * @return the radius of the target
+     */
     public float getRadius() {
         return radius;
     }
     
+    /**
+     * Get the z position of the target
+     * @return the z position of the target
+     */
     public int getZsamples() {
         return zSamples;
     }
     
+    /**
+     * Get the radial of the target
+     * @return the radial of the target
+     */
     public int getRadialSamples() {
         return radialSamples;
     }
     
+    /**
+     * Create a String representation of all attributes
+     * @return a String representation of all attributes
+     */
     public String toString() {
         String s = "Radius: " + radius + " z-samples: " + zSamples + " Radial Samples: " + radialSamples;
         return s;
     }
     
+    /**
+     * Clone method - create a new ball target with same attributes as this one
+     * @return a new ball target with same attributes as this one
+     */
     public BallTarget clone() {
         BallTarget b1 = new BallTarget(pos, radius, color);
         return b1;
