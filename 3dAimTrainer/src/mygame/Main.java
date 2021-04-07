@@ -1,5 +1,7 @@
 package mygame;
 
+import java.text.DecimalFormat;
+
 import com.jme3.app.SimpleApplication;
 import com.jme3.audio.AudioData.DataType;
 import com.jme3.audio.AudioNode;
@@ -60,7 +62,7 @@ public class Main extends SimpleApplication implements ActionListener {
     private Vector3f camLeft = new Vector3f();
     //text box to hold stats
     BitmapText hudStats;
-    static int[][] test = {{1,2},{3,4}};
+    DecimalFormat twoPoints = new DecimalFormat("0.0%");
     
     static SpaceDef[][] targetPositions;
     
@@ -138,9 +140,9 @@ public class Main extends SimpleApplication implements ActionListener {
         
         //displays stats in real time
         hudStats = new BitmapText(guiFont, false);
-        hudStats.setSize(guiFont.getCharSet().getRenderedSize());  
+        hudStats.setSize(guiFont.getCharSet().getRenderedSize() * 4);  
         hudStats.setColor(ColorRGBA.Blue);                             // font color
-        hudStats.setText("Accuracy: " + (float) targetsHit / shotsFired + "\nTargets hit: " + targetsHit + "\nShots taken: " + shotsFired);
+        hudStats.setText("Accuracy: " + twoPoints.format((float) targetsHit / shotsFired) + "\nTargets hit: " + targetsHit + "\nShots taken: " + shotsFired);
         hudStats.setLocalTranslation(300, hudStats.getLineHeight() * 3, 0); // position
         guiNode.attachChild(hudStats);
     }
@@ -225,7 +227,7 @@ public class Main extends SimpleApplication implements ActionListener {
           shootables.detachChild(closest.getGeometry());
           newTarget();
         }
-        hudStats.setText("Accuracy: " + (float) targetsHit / shotsFired + "\nTargets hit: " + targetsHit + "\nShots taken: " + shotsFired);
+        hudStats.setText("Accuracy: " + twoPoints.format((float) targetsHit / shotsFired) + "\nTargets hit: " + targetsHit + "\nShots taken: " + shotsFired);
         
     //run this code when game ends
     //this will get the user's stats and diplay them in the game over GUI
