@@ -72,12 +72,6 @@ public abstract class AbstractTarget {
     }
     
     /**
-     * Get the dimensions of the target
-     * @return the dimensions of the target
-     */
-    public abstract SpaceDef getDimensions();
-    
-    /**
      * Create a String representation of all attributes
      * @return a String representation of all attributes
      */

@@ -27,6 +27,16 @@ public class StatEntry {
         this.accuracy = (targetsHit/shotsFired) * 100; //calculate accuracy by dividing targets hit by shots fired and multiply by 100 to make it a percent
     }
     
+    public int compareTo(StatEntry other) {
+        if (accuracy > other.getAccuracy()) {
+            return 1;
+        } else if (accuracy == other.getAccuracy()) {
+            return 0;
+        } else {
+            return -1;
+        }
+    }
+    
     /**
      * Mutator method for the number of targets the player hit
      * @param targetsHit - the number of targets the player hit

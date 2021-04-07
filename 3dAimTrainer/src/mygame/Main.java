@@ -166,13 +166,19 @@ public class Main extends SimpleApplication implements ActionListener {
           System.out.println("* Collision #" + i);
           System.out.println("  You shot " + hit + " at " + pt + ", " + dist + " wu away.");
         }
-        // 5. Use the results (we mark the hit object)
+        // 5. If something was hit
         if (results.size() > 0) {
           // The closest collision point is what was truly hit:
           CollisionResult closest = results.getClosestCollision();
-          closest.getGeometry().setCullHint(CullHint.Always);
+          //remove it from shootables
+          shootables.detachChild(closest.getGeometry());
+          
         }
     }
+  }
+  
+  public void newTarget() {
+      
   }
 
   /**
