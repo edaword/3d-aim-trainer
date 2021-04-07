@@ -170,6 +170,16 @@ public class GameOverWindow extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnMenuActionPerformed
 
+    /**
+     * Get a StatEntry containg a players stats and display these stats on the GUI
+     * @param gameStats - the StatEntry containing the player's stats
+     */
+    public static void getGameStats(StatEntry gameStats){
+        //set each text field to the appropriate game stat by using getter methods in StatEntry class
+        txtFieldAccuracy.setText(gameStats.getAccuracy() +"%");
+        txtFieldTotalShotsTaken.setText(gameStats.getShotsFired() + " shots");
+        txtFieldTotalTargetsHit.setText(gameStats.getTargetsHit() + " targets hit");
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExit;
@@ -179,8 +189,8 @@ public class GameOverWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JTextField txtFieldAccuracy;
-    private javax.swing.JTextField txtFieldTotalShotsTaken;
-    private javax.swing.JTextField txtFieldTotalTargetsHit;
+    private static javax.swing.JTextField txtFieldAccuracy;
+    private static javax.swing.JTextField txtFieldTotalShotsTaken;
+    private static javax.swing.JTextField txtFieldTotalTargetsHit;
     // End of variables declaration//GEN-END:variables
 }

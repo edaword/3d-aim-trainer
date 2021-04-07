@@ -39,10 +39,12 @@ public class Main extends SimpleApplication implements ActionListener {
     private Vector3f walkDirection = new Vector3f();
     private boolean left = false, right = false, up = false, down = false;
     //declare counter variables
-    int targetsHit, numShots;
+    int targetsHit, shotsFired;
     //create AudioNodes for sound effects
     private AudioNode gunshot;
     private AudioNode ding;
+    //declare variable for the game stats
+    StatEntry gameStats;
     //declare variable for the crosshair shape
     int crosshairIndex;
     //create color variables for the colors that the user chose in the settings GUI
@@ -224,6 +226,11 @@ public class Main extends SimpleApplication implements ActionListener {
           newTarget();
         }
         hudStats.setText("Accuracy: " + (float) targetsHit / numShots + "\nTargets hit: " + targetsHit + "\nShots taken: " + numShots);
+        
+    //run this code when game ends
+    //this will get the user's stats and diplay them in the game over GUI
+    //gameStats = new StatEntry(targetsHit,shotsFired); //create a new stat entry using the current game stats
+    //GameOverWindow.getGameStats(gameStats); //send this stat entry to the game over gui in order to display stats
     }
   }
   
@@ -272,7 +279,7 @@ public class Main extends SimpleApplication implements ActionListener {
         //TODO: add render code
     }
     
-    /** A centered plus sign to help the player aim. */
+    /** A centered plus or circle sign to help the player aim. */
     protected void initCrossHairs() {
         crosshairIndex = SettingsWindow.getCrosshairIndex();
         setDisplayStatView(false);
@@ -300,5 +307,7 @@ public class Main extends SimpleApplication implements ActionListener {
         cube.setMaterial(mat1);
         return cube;
     }
+    
+   
 
 }
