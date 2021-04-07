@@ -56,7 +56,8 @@ public class Main extends SimpleApplication implements ActionListener {
     //They here to avoid instanciating new vectors on each frame
     private Vector3f camDir = new Vector3f();
     private Vector3f camLeft = new Vector3f();
-    
+    //text box to hold stats
+    BitmapText hudStats;
     static int[][] test = {{1,2},{3,4}};
     
     static SpaceDef[][] targetPositions;
@@ -90,6 +91,10 @@ public class Main extends SimpleApplication implements ActionListener {
     @Override
     public void simpleInitApp() {
 
+        numShots = 0;
+        targetsHit = 0;
+        
+        flyCam.setRotationSpeed(1);
         
         /** Set up Physics */
         bulletAppState = new BulletAppState();
@@ -128,6 +133,14 @@ public class Main extends SimpleApplication implements ActionListener {
         rootNode.attachChild(shootables);
         //start with a single target in the middle
         shootables.attachChild(makeCube("original", targetPositions[2][2]));
+        
+        //displays stats in real time
+        hudStats = new BitmapText(guiFont, false);
+        hudStats.setSize(guiFont.getCharSet().getRenderedSize());  
+        hudStats.setColor(ColorRGBA.Blue);                             // font color
+        hudStats.setText("Accuracy: " + (float) targetsHit / numShots + "\nTargets hit: " + targetsHit + "\nShots taken: " + numShots);
+        hudStats.setLocalTranslation(300, hudStats.getLineHeight() * 3, 0); // position
+        guiNode.attachChild(hudStats);
     }
 
     /** We over-write some navigational key mappings here, so we can
@@ -183,12 +196,11 @@ public class Main extends SimpleApplication implements ActionListener {
         gunshot.playInstance();
         //add one to the total shots counter
         numShots++;
-        // 1. Reset results list. CollisionResults is an arrayList of objects 
-        //    of type CollisionResult
+        // 1. Reset the results. CollisionResults is an arrayList of objects of type CollisionResult
         CollisionResults results = new CollisionResults();
         // 2. Draw a ray from the camera location in the camera direction
         Ray ray = new Ray(cam.getLocation(), cam.getDirection());
-        // 3. Collect intersections between Ray and Shootables in results list.
+        // 3. Collect intersections between the Ray and objects in the shootables node in results list.
         shootables.collideWith(ray, results);
         // 4. Print the results
         System.out.println("----- Collisions? " + results.size() + "-----");
@@ -211,6 +223,7 @@ public class Main extends SimpleApplication implements ActionListener {
           shootables.detachChild(closest.getGeometry());
           newTarget();
         }
+        hudStats.setText("Accuracy: " + (float) targetsHit / numShots + "\nTargets hit: " + targetsHit + "\nShots taken: " + numShots);
     }
   }
   
