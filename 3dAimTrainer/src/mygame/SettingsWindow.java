@@ -47,12 +47,12 @@ public class SettingsWindow extends javax.swing.JFrame {
         txtFieldSensitivity = new javax.swing.JTextField();
         txtFieldBackgroundColor = new javax.swing.JTextField();
         txtFieldTargetColor = new javax.swing.JTextField();
-        txtFieldCrosshairShape = new javax.swing.JTextField();
         txtFieldCrosshairColor = new javax.swing.JTextField();
         btnApply = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 0, 0));
@@ -116,9 +116,6 @@ public class SettingsWindow extends javax.swing.JFrame {
         txtFieldTargetColor.setBackground(new java.awt.Color(204, 204, 255));
         txtFieldTargetColor.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
 
-        txtFieldCrosshairShape.setBackground(new java.awt.Color(204, 204, 255));
-        txtFieldCrosshairShape.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
-
         txtFieldCrosshairColor.setBackground(new java.awt.Color(204, 204, 255));
         txtFieldCrosshairColor.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
 
@@ -145,6 +142,9 @@ public class SettingsWindow extends javax.swing.JFrame {
         jLabel17.setText("Settings!!");
 
         jLabel18.setText("For all color settings, enter values seperated by a space. Ex. 255 255 255");
+
+        jComboBox1.setBackground(new java.awt.Color(204, 204, 255));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "+", "o" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -194,8 +194,8 @@ public class SettingsWindow extends javax.swing.JFrame {
                                             .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(txtFieldBackgroundColor, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(txtFieldTargetColor, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtFieldCrosshairShape, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtFieldCrosshairColor, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                            .addComponent(txtFieldCrosshairColor, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                             .addComponent(jLabel15)
                             .addComponent(jLabel7)
                             .addComponent(jLabel18))
@@ -231,7 +231,7 @@ public class SettingsWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(jLabel13)
-                    .addComponent(txtFieldCrosshairShape, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
@@ -346,6 +346,7 @@ public class SettingsWindow extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnApply;
     private javax.swing.JButton btnBack;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -366,7 +367,6 @@ public class SettingsWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JTextField txtFieldBackgroundColor;
     private javax.swing.JTextField txtFieldCrosshairColor;
-    private javax.swing.JTextField txtFieldCrosshairShape;
     private javax.swing.JTextField txtFieldSensitivity;
     private javax.swing.JTextField txtFieldTargetColor;
     // End of variables declaration//GEN-END:variables

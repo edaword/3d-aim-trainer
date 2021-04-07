@@ -43,6 +43,8 @@ public class Main extends SimpleApplication implements ActionListener {
     //create AudioNodes for sound effects
     private AudioNode gunshot;
     private AudioNode ding;
+    //declare variable for the crosshair shape
+    int crosshairIndex;
     //Temporary vectors used on each frame.
     //They here to avoid instanciating new vectors on each frame
     private Vector3f camDir = new Vector3f();
@@ -251,11 +253,16 @@ public class Main extends SimpleApplication implements ActionListener {
     
     /** A centered plus sign to help the player aim. */
     protected void initCrossHairs() {
+        crosshairIndex = SettingsWindow.getCrosshairIndex();
         setDisplayStatView(false);
         guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
         BitmapText ch = new BitmapText(guiFont, false);
         ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
-        ch.setText("+"); // crosshairs
+        if(crosshairIndex == 0){ //if the user selected a + shape
+            ch.setText("+"); // create + shape crosshair
+        }else if (crosshairIndex == 1){ //if the user selected the o shape
+            ch.setText("o"); //create o shape crosshair
+        }
         ch.setLocalTranslation( // center
           settings.getWidth() / 2 - ch.getLineWidth()/2,
           settings.getHeight() / 2 + ch.getLineHeight()/2, 0);
