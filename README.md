@@ -1,5 +1,5 @@
 # 3d-aim-trainer
- An aim trainer in java with jMonkeyEngine for my ICS4U final project.
+ An aim trainer in java with openGL for our ICS4U final project.
 
 INSTALLATION  
  $ git clone https://github.com/edaword/3d-aim-trainer.git  
