@@ -93,7 +93,7 @@ public class Main extends SimpleApplication implements ActionListener {
     @Override
     public void simpleInitApp() {
 
-        numShots = 0;
+        shotsFired = 0;
         targetsHit = 0;
         
         flyCam.setRotationSpeed(1);
@@ -140,7 +140,7 @@ public class Main extends SimpleApplication implements ActionListener {
         hudStats = new BitmapText(guiFont, false);
         hudStats.setSize(guiFont.getCharSet().getRenderedSize());  
         hudStats.setColor(ColorRGBA.Blue);                             // font color
-        hudStats.setText("Accuracy: " + (float) targetsHit / numShots + "\nTargets hit: " + targetsHit + "\nShots taken: " + numShots);
+        hudStats.setText("Accuracy: " + (float) targetsHit / shotsFired + "\nTargets hit: " + targetsHit + "\nShots taken: " + shotsFired);
         hudStats.setLocalTranslation(300, hudStats.getLineHeight() * 3, 0); // position
         guiNode.attachChild(hudStats);
     }
@@ -197,7 +197,7 @@ public class Main extends SimpleApplication implements ActionListener {
         //play the gunshot sound
         gunshot.playInstance();
         //add one to the total shots counter
-        numShots++;
+        shotsFired++;
         // 1. Reset the results. CollisionResults is an arrayList of objects of type CollisionResult
         CollisionResults results = new CollisionResults();
         // 2. Draw a ray from the camera location in the camera direction
@@ -225,7 +225,7 @@ public class Main extends SimpleApplication implements ActionListener {
           shootables.detachChild(closest.getGeometry());
           newTarget();
         }
-        hudStats.setText("Accuracy: " + (float) targetsHit / numShots + "\nTargets hit: " + targetsHit + "\nShots taken: " + numShots);
+        hudStats.setText("Accuracy: " + (float) targetsHit / shotsFired + "\nTargets hit: " + targetsHit + "\nShots taken: " + shotsFired);
         
     //run this code when game ends
     //this will get the user's stats and diplay them in the game over GUI
