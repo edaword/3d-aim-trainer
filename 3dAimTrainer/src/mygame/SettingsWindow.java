@@ -271,9 +271,7 @@ public class SettingsWindow extends javax.swing.JFrame {
         //create variables for all setting attributes
         String sBackgroundColor, sTargetColor, sCrosshairColor;
         String[] backgroundColors, targetColors, crosshairColors;
-        
-        
-        
+
         //get background color as a String
         sBackgroundColor = txtFieldBackgroundColor.getText();
         //use the split method and get all 3 rgb values in the String color variable
@@ -452,23 +450,6 @@ public class SettingsWindow extends javax.swing.JFrame {
      */
     public static double getCA(){
         return crosshairA;
-    }
-    
-    
-    /**
-     * Get the color that the user chose for the targets
-     * @return the color that the user chose for the targets
-     */
-    public static ColorRGBA getTargetColor(){
-        return targetColor;
-    }
-    
-    /**
-     * Get the color that the user chose for the crosshair
-     * @return the color that the user chose for the crosshair
-     */
-    public static ColorRGBA getCrosshairColor(){
-        return crosshairColor;
     }
    
 
