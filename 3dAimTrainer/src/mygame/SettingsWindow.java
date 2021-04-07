@@ -12,9 +12,9 @@ public class SettingsWindow extends javax.swing.JFrame {
     static int crosshairIndex;
     //create global variables for the colors that the user chose
     static ColorRGBA backgroundColor, targetColor, crosshairColor;
-    static int backgroundR, backgroundG, backgroundB,
-                targetR, targetG, targetB,
-                crosshairR, crosshairG, crosshairB;
+    static int backgroundR = 0, backgroundG = 0, backgroundB = 0,
+                targetR = 255, targetG = 255, targetB = 255,
+                crosshairR = 255, crosshairG = 0, crosshairB = 0;
     static double  backgroundA = 0.3, targetA = 0.3, crosshairA = 0.3; 
     //create an intro window variable
     private IntroWindow intro;
@@ -274,67 +274,74 @@ public class SettingsWindow extends javax.swing.JFrame {
 
         //get background color as a String
         sBackgroundColor = txtFieldBackgroundColor.getText();
-        //use the split method and get all 3 rgb values in the String color variable
-        //use an array to hold each rgb value
-        backgroundColors = sBackgroundColor.split(" ");
-        //assign all 3 rgb values to individual variables
-        backgroundR = Integer.parseInt(backgroundColors[0]);
-        backgroundG = Integer.parseInt(backgroundColors[1]);
-        backgroundB = Integer.parseInt(backgroundColors[2]);
-        //error check user input
-        //if user entered an incorrect value, set value to 255
-        if(backgroundR < 0 || backgroundR > 255){
-            backgroundR = 255;
-        }if(backgroundG < 0 || backgroundG > 255){
-            backgroundG = 255;
-        }if(backgroundB < 0 || backgroundB > 255){
-            backgroundB = 255;
+        if (!sBackgroundColor.equals("")){ //if the user entered a new color
+            //use the split method and get all 3 rgb values in the String color variable
+            //use an array to hold each rgb value
+            backgroundColors = sBackgroundColor.split(" ");
+            //assign all 3 rgb values to individual variables
+            backgroundR = Integer.parseInt(backgroundColors[0]);
+            backgroundG = Integer.parseInt(backgroundColors[1]);
+            backgroundB = Integer.parseInt(backgroundColors[2]);
+            //error check user input
+            //if user entered an incorrect value, set value to 255
+            if(backgroundR < 0 || backgroundR > 255){
+                backgroundR = 255;
+            }
+            if(backgroundG < 0 || backgroundG > 255){
+                backgroundG = 255;
+            }
+            if(backgroundB < 0 || backgroundB > 255){
+                backgroundB = 255;
+            }
         }
-        //create an RGBA background color
-        backgroundColor = new ColorRGBA(backgroundR, backgroundG, backgroundB, (float)backgroundA);
+            //create an RGBA background color
+            backgroundColor = new ColorRGBA(backgroundR, backgroundG, backgroundB, (float)backgroundA);
+
+        
         //get target color as a String
         sTargetColor = txtFieldTargetColor.getText();
-        //use the split method and get all 3 rgb values in the String color variable
-        //use an array to hold each rgb value
-        targetColors = sTargetColor.split(" ");
-        //assign all 3 rgb values to individual variables
-        targetR = Integer.parseInt(targetColors[0]);
-        targetG = Integer.parseInt(targetColors[1]);
-        targetB = Integer.parseInt(targetColors[2]);
-        //error check user input
-        //if user entered an incorrect value, set value to 255
-        if(targetR < 0 || targetR > 255){
-            targetR = 255;
-        }if(targetG < 0 || targetG > 255){
-            targetG = 255;
-        }if(targetB < 0 || targetB > 255){
-            targetB = 255;
+        if (!sTargetColor.equals("")){ //if the user entered a new color
+            //use the split method and get all 3 rgb values in the String color variable
+            //use an array to hold each rgb value
+            targetColors = sTargetColor.split(" ");
+            //assign all 3 rgb values to individual variables
+            targetR = Integer.parseInt(targetColors[0]);
+            targetG = Integer.parseInt(targetColors[1]);
+            targetB = Integer.parseInt(targetColors[2]);
+            //error check user input
+            //if user entered an incorrect value, set value to 255
+            if(targetR < 0 || targetR > 255){
+                targetR = 255;
+            }if(targetG < 0 || targetG > 255){
+                targetG = 255;
+            }if(targetB < 0 || targetB > 255){
+                targetB = 255;
+            }
         }
         //create an RGBA target color
         targetColor = new ColorRGBA(targetR, targetG, targetB, (float)targetA);
         //get crosshair color as a String
         sCrosshairColor = txtFieldCrosshairColor.getText();
-        //use the split method and get all 3 rgb values in the String color variable
-        //use an array to hold each rgb value
-        crosshairColors = sCrosshairColor.split(" ");
-        //assign all 3 rgb values to individual variables
-        crosshairR = Integer.parseInt(crosshairColors[0]);
-        crosshairG = Integer.parseInt(crosshairColors[1]);
-        crosshairB = Integer.parseInt(crosshairColors[2]);
-        //error check user input
-        //if user entered an incorrect value, set value to 255
-        if(crosshairR < 0 || crosshairR > 255){
-            crosshairR = 255;
-        }if(crosshairG < 0 || crosshairG > 255){
-            crosshairG = 255;
-        }if(crosshairB < 0 || crosshairB > 255){
-            crosshairB = 255;
+        if (!sCrosshairColor.equals("")){ //if the user entered a new color
+            //use the split method and get all 3 rgb values in the String color variable
+            //use an array to hold each rgb value
+            crosshairColors = sCrosshairColor.split(" ");
+            //assign all 3 rgb values to individual variables
+            crosshairR = Integer.parseInt(crosshairColors[0]);
+            crosshairG = Integer.parseInt(crosshairColors[1]);
+            crosshairB = Integer.parseInt(crosshairColors[2]);
+            //error check user input
+            //if user entered an incorrect value, set value to 255
+            if(crosshairR < 0 || crosshairR > 255){
+                crosshairR = 255;
+            }if(crosshairG < 0 || crosshairG > 255){
+                crosshairG = 255;
+            }if(crosshairB < 0 || crosshairB > 255){
+                crosshairB = 255;
+            }
         }
         //create an RGBA crosshair color
         crosshairColor = new ColorRGBA(crosshairR, crosshairG, crosshairB, (float)crosshairA);
-        for (int i = 0; i < 3; i++) {
-            System.out.println(backgroundColors[i] + " " + targetColors[i] + " " + crosshairColors[i]);
-        }
         //get the index of the shape that the user selected for the crosshair
         //index 0 is + and index 1 is o
         crosshairIndex = comboBoxCrosshairShape.getSelectedIndex();
