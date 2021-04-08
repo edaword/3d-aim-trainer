@@ -6,6 +6,7 @@ April 2nd 2021
 This is a GUI for the game's introduction screen
  */
 import java.util.ArrayList;
+import static mygame.Main.app;
 
 public class IntroWindow extends javax.swing.JFrame {
 
@@ -14,6 +15,7 @@ public class IntroWindow extends javax.swing.JFrame {
     private IntroWindow introScreen;
     private CreditsWindow credits;
     private StatsWindow stats;
+    static boolean testStart = false;
     /**
      * Creates new form IntroScreen
      * @param m - the intro screen for the game
@@ -145,12 +147,27 @@ public class IntroWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSettingsActionPerformed
 
     private void btnPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlayActionPerformed
+        app.start();
         //hide the gui so the user can play the game
         this.setVisible(false);
+<<<<<<< Updated upstream
         //start game
         Main app = new Main();
         app.start();
+=======
+        //-------START GAME--------
+//        tempStart();
+        new Thread(new Runnable() {
+            public void run() {
+                app.start();
+            }
+        }).start();
+>>>>>>> Stashed changes
     }//GEN-LAST:event_btnPlayActionPerformed
+    
+    static void tempStart() {
+        testStart = true;
+    }
 
     private void btnCreditsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreditsActionPerformed
         //check if the credits window has been created

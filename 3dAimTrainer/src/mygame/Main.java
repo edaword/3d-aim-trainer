@@ -66,8 +66,14 @@ public class Main extends SimpleApplication implements ActionListener {
     DecimalFormat twoPoints = new DecimalFormat("0.0%");
     
     static SpaceDef[][] targetPositions;
+    static Main app = new Main();
+    
+//    public Main () {
+//        super();
+//    }
     
     public static void main(String[] args) {
+<<<<<<< Updated upstream
        SpaceDef[][] tempTargetPositions8 = {{new SpaceDef(4f,3f,-3.5f),new SpaceDef(4f,3f,-2.5f),new SpaceDef(4f,3f,-1.5f),new SpaceDef(4f,3f,-0.5f),new SpaceDef(4f,3f,0.5f),new SpaceDef(4f,3f,1.5f),new SpaceDef(4f,3f,2.5f),new SpaceDef(4f,3f,3.5f)},
                                            {new SpaceDef(4f,4f,-3.5f),new SpaceDef(4f,4f,-2.5f),new SpaceDef(4f,4f,-1.5f),new SpaceDef(4f,4f,-0.5f),new SpaceDef(4f,4f,0.5f),new SpaceDef(4f,4f,1.5f),new SpaceDef(4f,4f,2.5f),new SpaceDef(4f,4f,3.5f)}, 
                                            {new SpaceDef(4f,5f,-3.5f),new SpaceDef(4f,5f,-2.5f),new SpaceDef(4f,5f,-1.5f),new SpaceDef(4f,5f,-0.5f),new SpaceDef(4f,5f,0.5f),new SpaceDef(4f,5f,1.5f),new SpaceDef(4f,5f,2.5f),new SpaceDef(4f,5f,3.5f)},
@@ -86,6 +92,13 @@ public class Main extends SimpleApplication implements ActionListener {
                             
            targetPositions = tempTargetPositions5;
         
+=======
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new IntroWindow().setVisible(true);
+            }
+        });
+>>>>>>> Stashed changes
     }
     
     //node to hold spatials that can be shot
@@ -93,7 +106,15 @@ public class Main extends SimpleApplication implements ActionListener {
 
     @Override
     public void simpleInitApp() {
-
+        SpaceDef[][] tempTargetPositions5 = {
+                                            {new SpaceDef(20f,3f,-2),new SpaceDef(20f,3f,-1),new SpaceDef(20f,3f,0),new SpaceDef(20f,3f,1),new SpaceDef(20f,3f,2)},
+                                            {new SpaceDef(20f,4f,-2),new SpaceDef(20f,4f,-1),new SpaceDef(20f,4f,0),new SpaceDef(20f,4f,1),new SpaceDef(20f,4f,2)},
+                                            {new SpaceDef(20f,5f,-2),new SpaceDef(20f,5f,-1),new SpaceDef(20f,5f,0),new SpaceDef(20f,5f,1),new SpaceDef(20f,5f,2)},
+                                            {new SpaceDef(20f,6f,-2),new SpaceDef(20f,6f,-1),new SpaceDef(20f,6f,0),new SpaceDef(20f,6f,1),new SpaceDef(20f,6f,2)},
+                                            {new SpaceDef(20f,7f,-2),new SpaceDef(20f,7f,-1),new SpaceDef(20f,7f,0),new SpaceDef(20f,7f,1),new SpaceDef(20f,7f,2)},    
+                                           };
+                            
+        targetPositions = tempTargetPositions5;
         shotsFired = 0;
         targetsHit = 0;
         
