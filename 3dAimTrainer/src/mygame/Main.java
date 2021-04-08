@@ -33,9 +33,7 @@ import com.jme3.renderer.RenderManager;
  
 public class Main extends SimpleApplication implements ActionListener {
     
-    //test s
-    //testtttttttttttttttttt
-    //test again
+    static final float degToRad90 = 1.570796f;
     private Spatial sceneModel;
     private BulletAppState bulletAppState;
     private RigidBodyControl landscape;
@@ -55,9 +53,7 @@ public class Main extends SimpleApplication implements ActionListener {
     private Vector3f camDir = new Vector3f();
     private Vector3f camLeft = new Vector3f();
     //text box to hold stats
-    BitmapText hudStats, testText;
-    //text box for credits wall
-    BitmapText creditsText;
+    BitmapText hudStats;
     DecimalFormat twoPoints = new DecimalFormat("0.0%");
     
     static SpaceDef[][] targetPositions;
@@ -141,58 +137,51 @@ public class Main extends SimpleApplication implements ActionListener {
         hudStats.setLocalTranslation(300, hudStats.getLineHeight() * 3, 0); // position
         guiNode.attachChild(hudStats);
         
-        Node testSetting = new Node();
-        Node settings = new Node();
-        settings.attachChild(testSetting);
-        rootNode.attachChild(settings);
+        BitmapText title = new BitmapText(guiFont,false);
+        title.setSize(2);
+        title.setText("3D AIM TRAINER");
+        title.setLocalTranslation(-4,16,-24);
+        rootNode.attachChild(title);
+
+        Node buttons = new Node();
+        rootNode.attachChild(buttons);
+
+        buttons.attachChild(makeButton("Endless", new SpaceDef(0,4,-24), "-z"));
+        buttons.attachChild(makeButton("50 Shot Challenge", new SpaceDef(0,6,-24), "-z"));
         
-        testSetting.attachChild(makeCube("something", new SpaceDef(1,1,1)));
-        testText = new BitmapText(guiFont, false);
-        testText.setSize(1);
-        testText.setColor(ColorRGBA.Red);
-        testText.setText("3D AIM TRAINER");
-        testText.setLocalTranslation(-4,5,0);
-        testSetting.setLocalTranslation(0,4,-24);
-        testSetting.attachChild(testText);
-        
-        //create nodes for the credits text
-        Node credits = new Node();
-        Node credits2 = new Node();
-        
-        //attach childs to node and rootNode for credit text
-        credits2.attachChild(credits);
-        rootNode.attachChild(credits2);
-        
-        //attach child to credits node
-        credits.attachChild(makeCube("cube", new SpaceDef((float)0.5,(float)0.5,(float)0.5)));
-        //create and cuztomize text
-        creditsText = new BitmapText(guiFont, false);
-        creditsText.setSize((float)0.5);
-        creditsText.setColor(ColorRGBA.Green);
-        creditsText.setText("Credits!!\nThis game was created by: Edward Wang & Asad Jiwani\nApril 8th 2021"
+        //text box for credits wall
+        BitmapText credits = new BitmapText(guiFont,false);
+        credits.setText("Credits!!\nThis game was created by: Edward Wang & Asad Jiwani\nApril 8th 2021"
                 + "\nProject Manager, Programmer, Technical Writer, Sound Effects: Asad Jiwani\nSystems Analyst, "
                 + "Lead Programmer, Graphics Artist: Edward Wang");
-        //move text to new location
-        creditsText.setLocalTranslation(-6,7,2);
-        credits.setLocalTranslation(2,6,-26);
-        //attach text to node as child
-        credits.attachChild(creditsText);
+        credits.rotate(0,degToRad90 * 2,0);
+        credits.setSize(0.5f);
+        credits.setLocalTranslation(0,8,24);
+        rootNode.attachChild(credits);
+        
     }
     
     private Node makeButton(String text, SpaceDef pos, String direction) {
         Node container = new Node();
-        
+        container.setLocalTranslation(new Vector3f(pos.getX(),pos.getY(),pos.getZ()));
         BitmapText bText = new BitmapText(guiFont, false);
         bText.setText(text);
         bText.setColor(ColorRGBA.Red);
-        
-        container.attachChild(makeCube("cube", pos));
-        
+        bText.setSize(2);
+        container.attachChild(makeCube("cube", new SpaceDef(0,0,0)));
+        container.attachChild(bText);
         if (direction.equals("-z")) {
-            bText.setLocalTranslation(4,0,0);
-//            bText.setLocalRotation(0,0,0);
+            bText.setLocalTranslation(2,1.5f,0);
+        } else if (direction.equals("+z")) {
+            bText.setLocalTranslation(-2,0,0);
+            bText.rotate(0f,degToRad90 * 2,0f);
+        } else if (direction.equals("-x")) {
+            bText.setLocalTranslation(2,0,4);
+            bText.rotate(0f,degToRad90,0f);
+        } else if (direction.equals("+x")) {
+            bText.setLocalTranslation(-2,0,-4);
+            bText.rotate(0f,-degToRad90,0f);
         }
-        
         return container;
     }
 
