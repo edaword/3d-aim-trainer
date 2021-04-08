@@ -38,8 +38,9 @@ import com.jme3.renderer.RenderManager;
 
  
 public class Main extends SimpleApplication implements ActionListener {
-    
+    //create variable that holds te value of 90 degrees in radian form
     static final float degToRad90 = 1.570796f;
+    //variables for game scene and control
     private Spatial sceneModel;
     private BulletAppState bulletAppState;
     private RigidBodyControl landscape;
@@ -68,6 +69,7 @@ public class Main extends SimpleApplication implements ActionListener {
     static SpaceDef[][] targetPositions;
     
     public static void main(String[] args) {
+       //create a 2D array of 8 target positions
        SpaceDef[][] tempTargetPositions8 = {{new SpaceDef(4f,3f,-3.5f),new SpaceDef(4f,3f,-2.5f),new SpaceDef(4f,3f,-1.5f),new SpaceDef(4f,3f,-0.5f),new SpaceDef(4f,3f,0.5f),new SpaceDef(4f,3f,1.5f),new SpaceDef(4f,3f,2.5f),new SpaceDef(4f,3f,3.5f)},
                                            {new SpaceDef(4f,4f,-3.5f),new SpaceDef(4f,4f,-2.5f),new SpaceDef(4f,4f,-1.5f),new SpaceDef(4f,4f,-0.5f),new SpaceDef(4f,4f,0.5f),new SpaceDef(4f,4f,1.5f),new SpaceDef(4f,4f,2.5f),new SpaceDef(4f,4f,3.5f)}, 
                                            {new SpaceDef(4f,5f,-3.5f),new SpaceDef(4f,5f,-2.5f),new SpaceDef(4f,5f,-1.5f),new SpaceDef(4f,5f,-0.5f),new SpaceDef(4f,5f,0.5f),new SpaceDef(4f,5f,1.5f),new SpaceDef(4f,5f,2.5f),new SpaceDef(4f,5f,3.5f)},
@@ -76,6 +78,7 @@ public class Main extends SimpleApplication implements ActionListener {
                                            {new SpaceDef(4f,8f,-3.5f),new SpaceDef(4f,8f,-2.5f),new SpaceDef(4f,8f,-1.5f),new SpaceDef(4f,8f,-0.5f),new SpaceDef(4f,8f,0.5f),new SpaceDef(4f,8f,1.5f),new SpaceDef(4f,8f,2.5f),new SpaceDef(4f,8f,3.5f)},
                                            {new SpaceDef(4f,9f,-3.5f),new SpaceDef(4f,9f,-2.5f),new SpaceDef(4f,9f,-1.5f),new SpaceDef(4f,9f,-0.5f),new SpaceDef(4f,9f,0.5f),new SpaceDef(4f,9f,1.5f),new SpaceDef(4f,9f,2.5f),new SpaceDef(4f,9f,3.5f)},
                                            {new SpaceDef(4f,10f,-3.5f),new SpaceDef(4f,10f,-2.5f),new SpaceDef(4f,10f,-1.5f),new SpaceDef(4f,10f,-0.5f),new SpaceDef(4f,10f,0.5f),new SpaceDef(4f,10f,1.5f),new SpaceDef(4f,10f,2.5f),new SpaceDef(4f,10f,3.5f)}};
+       //create a 2D array of 5 target positions
        SpaceDef[][] tempTargetPositions5 = {
                                             {new SpaceDef(20f,3f,-2),new SpaceDef(20f,3f,-1),new SpaceDef(20f,3f,0),new SpaceDef(20f,3f,1),new SpaceDef(20f,3f,2)},
                                             {new SpaceDef(20f,4f,-2),new SpaceDef(20f,4f,-1),new SpaceDef(20f,4f,0),new SpaceDef(20f,4f,1),new SpaceDef(20f,4f,2)},
@@ -83,8 +86,9 @@ public class Main extends SimpleApplication implements ActionListener {
                                             {new SpaceDef(20f,6f,-2),new SpaceDef(20f,6f,-1),new SpaceDef(20f,6f,0),new SpaceDef(20f,6f,1),new SpaceDef(20f,6f,2)},
                                             {new SpaceDef(20f,7f,-2),new SpaceDef(20f,7f,-1),new SpaceDef(20f,7f,0),new SpaceDef(20f,7f,1),new SpaceDef(20f,7f,2)},    
                                            };
-                            
+           //assign the 5 target position 2D array to the static 2D array                 
            targetPositions = tempTargetPositions5;
+        //start game
         Main app = new Main();
         app.start();
     }
@@ -93,11 +97,16 @@ public class Main extends SimpleApplication implements ActionListener {
     private Node shootables;
 
     @Override
+    /**
+     * Initialize the main game code
+     */
     public void simpleInitApp() {
 
+        //set counter variables to 0
         shotsFired = 0;
         targetsHit = 0;
         
+        //set rotation speed for camera
         flyCam.setRotationSpeed(1);
         
         /** Set up Physics */
@@ -116,7 +125,7 @@ public class Main extends SimpleApplication implements ActionListener {
     //light is already done
 //        setUpLight();
 
-        
+        //load scene from asset folder and add code to control/make scene
         sceneModel = assetManager.loadModel("Scenes/MyScene.j3o");
         CollisionShape sceneShape = CollisionShapeFactory.createMeshShape(sceneModel);
         landscape = new RigidBodyControl(sceneShape, 0);
@@ -133,8 +142,9 @@ public class Main extends SimpleApplication implements ActionListener {
         player.setGravity(new Vector3f(0,-30f,0));
         player.setPhysicsLocation(new Vector3f(0,10,0));
         
+        //create a new node for the users shots
         shootables = new Node("Shootables");
-        rootNode.attachChild(shootables);
+        rootNode.attachChild(shootables); //attach node to main node
         //start with a single target in the middle
         shootables.attachChild(makeCube("original", targetPositions[2][2]));
        
@@ -146,15 +156,19 @@ public class Main extends SimpleApplication implements ActionListener {
         hudStats.setLocalTranslation(300, hudStats.getLineHeight() * 3, 0); // position
         guiNode.attachChild(hudStats);
         
+        //display the intro wall
+        //write code to create/cuztomize intro wall text
         BitmapText title = new BitmapText(guiFont,false);
-        title.setSize(2);
+        title.setSize(2); //set font size
         title.setText("3D AIM TRAINER");
         title.setLocalTranslation(-4,16,-24);
         rootNode.attachChild(title);
 
+        //create nodes for the buttons on intro wall
         Node buttons = new Node();
         rootNode.attachChild(buttons);
 
+        //create buttons for the users options on intro wall
         buttons.attachChild(makeButton("Endless", new SpaceDef(0,4,-24), "-z"));
         buttons.attachChild(makeButton("50 Shot Challenge", new SpaceDef(0,6,-24), "-z"));
         
@@ -192,33 +206,47 @@ public class Main extends SimpleApplication implements ActionListener {
         }*/
     }
     
+    /**
+     * Make a button on the screen
+     * @param text - the text to display on the button
+     * @param pos - the position of the button
+     * @param direction - the direction of the button
+     * @return a node that has the button set up
+     */
     private Node makeButton(String text, SpaceDef pos, String direction) {
+        //create node for the button
         Node container = new Node();
+        //move button to new location
         container.setLocalTranslation(new Vector3f(pos.getX(),pos.getY(),pos.getZ()));
+        //set and cuztomize text on button
         BitmapText bText = new BitmapText(guiFont, false);
         bText.setText(text);
         bText.setColor(ColorRGBA.Red);
         bText.setSize(2);
+        //make cubes so that the user has something to shoot
         container.attachChild(makeCube("cube", new SpaceDef(0,0,0)));
+        //attach text to cube
         container.attachChild(bText);
+        //set the location of the text based on the direction parameter
         if (direction.equals("-z")) {
             bText.setLocalTranslation(2,1.5f,0);
         } else if (direction.equals("+z")) {
             bText.setLocalTranslation(-2,0,0);
-            bText.rotate(0f,degToRad90 * 2,0f);
+            bText.rotate(0f,degToRad90 * 2,0f); //rotate the text
         } else if (direction.equals("-x")) {
             bText.setLocalTranslation(2,0,4);
-            bText.rotate(0f,degToRad90,0f);
+            bText.rotate(0f,degToRad90,0f); //rotate the text
         } else if (direction.equals("+x")) {
             bText.setLocalTranslation(-2,0,-4);
-            bText.rotate(0f,-degToRad90,0f);
+            bText.rotate(0f,-degToRad90,0f); //rotate the text
         }
-        return container;
+        return container; //return node with button
     }
 
     /** We over-write some navigational key mappings here, so we can
    * add physics-controlled walking and jumping: */
   private void setUpKeys() {
+    //set up keys that control the user's movement and shooting
     inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
     inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
     inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
@@ -226,6 +254,7 @@ public class Main extends SimpleApplication implements ActionListener {
     inputManager.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
     inputManager.addMapping("Shoot", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         
+    //add listener to keys so that we can tell when the player clicked a button
     inputManager.addListener(this, "Left");
     inputManager.addListener(this, "Right");
     inputManager.addListener(this, "Up");
@@ -238,33 +267,41 @@ public class Main extends SimpleApplication implements ActionListener {
    * Initialize all the aduio sounds for the game
    */
   private void initAudio(){
+      //create node for the audio
       gunshot = new AudioNode(assetManager, "Sound/gunshot.wav", DataType.Buffer);
+      //cuztomize the sound controls so that it does not loop/keep on playing
       gunshot.setPositional(false);
       gunshot.setLooping(false);
+      //set volume for audio
       gunshot.setVolume(2);
+      //attach to node
       rootNode.attachChild(gunshot);
       
+      //create node for the audio
       ding = new AudioNode(assetManager, "Sound/ding.wav", DataType.Buffer);
+      //cuztomize the sound controls so that it does not loop/keep on playing
       ding.setPositional(false);
       ding.setLooping(false);
+      //set volume for audio
       ding.setVolume(2);
+      //attach to node
       rootNode.attachChild(ding);
   }
   
   /** These are our custom actions triggered by key presses.
    * We do not walk yet, we just keep track of the direction the user pressed. */
   public void onAction(String binding, boolean isPressed, float tpf) {
-    if (binding.equals("Left")) {
+    if (binding.equals("Left")) { //if the user wants to go left
       left = isPressed;
-    } else if (binding.equals("Right")) {
+    } else if (binding.equals("Right")) { //if the user wants to go right
       right= isPressed;
-    } else if (binding.equals("Up")) {
+    } else if (binding.equals("Up")) { //if the user wants to go up
       up = isPressed;
-    } else if (binding.equals("Down")) {
+    } else if (binding.equals("Down")) { //if the user wants to go down
       down = isPressed;
-    } else if (binding.equals("Jump")) {
-      if (isPressed) { player.jump(new Vector3f(0,20f,0));}
-    } else if (binding.equals("Shoot") && !isPressed) {
+    } else if (binding.equals("Jump")) { //if the user wants to jump
+      if (isPressed) { player.jump(new Vector3f(0,20f,0));} //write code to allow user to jump
+    } else if (binding.equals("Shoot") && !isPressed) { //if the user wants to shoot and they did not press any other keys
         //play the gunshot sound
         gunshot.playInstance();
         //add one to the total shots counter
@@ -296,17 +333,22 @@ public class Main extends SimpleApplication implements ActionListener {
           shootables.detachChild(closest.getGeometry());
           newTarget();
         }
+        //update stats in real time
         hudStats.setText("Accuracy: " + twoPoints.format((float) targetsHit / shotsFired) + "\nTargets hit: " + targetsHit + "\nShots taken: " + shotsFired);
         
     }
   }
-  
+  /**
+   * Create a new target for the user to shoot
+   */
   public void newTarget() {
+      //position variables for target
       int xPos, yPos;
       System.out.println(targetPositions.length);
+      //randomize position for target
       xPos = (int) (Math.random() * (targetPositions.length));
       yPos = (int) (Math.random() * (targetPositions.length));
-      
+      //attach to node
       shootables.attachChild(makeCube("target", targetPositions[xPos][yPos]));
   }
 
@@ -325,20 +367,21 @@ public class Main extends SimpleApplication implements ActionListener {
         camDir.setY(0);
         camLeft.setY(0);
         walkDirection.set(0, 0, 0);
-        if (left) {
+        //create a new walking direction for the player based on where they wanna go
+        if (left) { //if we want to go left
             walkDirection.addLocal(camLeft);
         }
-        if (right) {
+        if (right) { //if we want to go right
             walkDirection.addLocal(camLeft.negate());
         }
-        if (up) {
+        if (up) { //if we want to go up
             walkDirection.addLocal(camDir);
         }
-        if (down) {
+        if (down) { //if we want to go down
             walkDirection.addLocal(camDir.negate());
         }
-        player.setWalkDirection(walkDirection);
-        cam.setLocation(player.getPhysicsLocation());
+        player.setWalkDirection(walkDirection);//set the walking direction of the player
+        cam.setLocation(player.getPhysicsLocation()); //set location of the camera
     }
 
     @Override
@@ -349,25 +392,35 @@ public class Main extends SimpleApplication implements ActionListener {
     /** A centered plus sign to help the player aim. */
     protected void initCrossHairs() {
         setDisplayStatView(false);
+        //load font from assets folder
         guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
+        //create and cuztomize crosshair font
         BitmapText ch = new BitmapText(guiFont, false);
         ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
         ch.setText("+"); // create + shape crosshair
         ch.setLocalTranslation( // center
           settings.getWidth() / 2 - ch.getLineWidth()/2,
           settings.getHeight() / 2 + ch.getLineHeight()/2, 0);
-        guiNode.attachChild(ch);
+        guiNode.attachChild(ch); //attach to node
     }
 
-    /** A cube object for target practice */
+    /**
+     * Make a cube for target practice
+     * @param name - name of the cube
+     * @param pos - position of the cube
+     * @return the cube made for target practice
+     */
     protected Geometry makeCube(String name, SpaceDef pos) {
-        Box box = new Box(0.5f, 0.5f, 0.5f);
+        Box box = new Box(0.5f, 0.5f, 0.5f); //create box using built in methods
+        //create new geomtery using the box above
         Geometry cube = new Geometry(name, box);
+        //move the geometry to new location
         cube.setLocalTranslation(pos.getX(), pos.getY(), pos.getZ());
+        //load data from asset folder
         Material mat1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat1.setColor("Color", ColorRGBA.randomColor());
+        mat1.setColor("Color", ColorRGBA.randomColor()); //randomize color of cube
         cube.setMaterial(mat1);
-        return cube;
+        return cube; //return the cube
     }
     
     /**
@@ -413,6 +466,4 @@ public class Main extends SimpleApplication implements ActionListener {
         //return the sorted array
         return a;
     }
-   
-
 }
