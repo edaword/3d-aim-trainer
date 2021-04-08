@@ -58,14 +58,10 @@ public class Main extends SimpleApplication implements ActionListener {
     private Vector3f camDir = new Vector3f();
     private Vector3f camLeft = new Vector3f();
     //text box to hold stats
-<<<<<<< Updated upstream
-    BitmapText hudStats;
-=======
     BitmapText hudStats, testText;
     //text box for credits wall
     BitmapText creditsText;
     //decimal format for the in game accuracy
->>>>>>> Stashed changes
     DecimalFormat twoPoints = new DecimalFormat("0.0%");
     //create an array of stat entries for the user's top 5 scores
     StatEntry[] topFive = new StatEntry[5];
@@ -167,13 +163,11 @@ public class Main extends SimpleApplication implements ActionListener {
         credits.setText("Credits!!\nThis game was created by: Edward Wang & Asad Jiwani\nApril 8th 2021"
                 + "\nProject Manager, Programmer, Technical Writer, Sound Effects: Asad Jiwani\nSystems Analyst, "
                 + "Lead Programmer, Graphics Artist: Edward Wang");
-<<<<<<< Updated upstream
         credits.rotate(0,degToRad90 * 2,0);
         credits.setSize(0.5f);
         credits.setLocalTranslation(0,8,24);
         rootNode.attachChild(credits);
         
-=======
         //move text to new location
         creditsText.setLocalTranslation(-3,7,2);
         credits.setLocalTranslation(4,6,-24);
@@ -196,7 +190,6 @@ public class Main extends SimpleApplication implements ActionListener {
         for (int i = 0; i < 5; i++) {
             output += topFive[i].getAccuracy();
         }*/
->>>>>>> Stashed changes
     }
     
     private Node makeButton(String text, SpaceDef pos, String direction) {
