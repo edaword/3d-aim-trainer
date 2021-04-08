@@ -5,7 +5,6 @@ Asad Jiwani & Edward Wang
 April 2nd 2021
 This is a GUI for the game's introduction screen
  */
-import java.util.ArrayList;
 
 public class IntroWindow extends javax.swing.JFrame {
 
