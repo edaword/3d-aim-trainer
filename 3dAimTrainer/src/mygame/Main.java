@@ -59,9 +59,7 @@ public class Main extends SimpleApplication implements ActionListener {
     private Vector3f camDir = new Vector3f();
     private Vector3f camLeft = new Vector3f();
     //text box to hold stats
-    BitmapText hudStats, testText;
-    //text box for credits wall
-    BitmapText creditsText;
+    BitmapText hudStats;
     //decimal format for the in game accuracy
     DecimalFormat twoPoints = new DecimalFormat("0.0%");
     //create an array of stat entries for the user's top 5 scores
@@ -181,12 +179,6 @@ public class Main extends SimpleApplication implements ActionListener {
         credits.setSize(0.5f);
         credits.setLocalTranslation(0,8,24);
         rootNode.attachChild(credits);
-        
-        //move text to new location
-        creditsText.setLocalTranslation(-3,7,2);
-        credits.setLocalTranslation(4,6,-24);
-        //attach text to node as child
-        credits.attachChild(creditsText);
         
         /*//run this code everytime a 50 round game ends
         String output = "";
