@@ -63,10 +63,17 @@ public class Main extends SimpleApplication implements ActionListener {
     //decimal format for the in game accuracy
     DecimalFormat twoPoints = new DecimalFormat("0.0%");
     //create an array of stat entries for the user's top 5 scores
-    StatEntry[] topFive = new StatEntry[5];
+    static StatEntry[] topFive = new StatEntry[5];
+    
     static SpaceDef[][] targetPositions;
     
     public static void main(String[] args) {
+        //initialize all top 5 scores to 0
+        topFive[0] = new StatEntry(0,0,0);
+        topFive[1] = new StatEntry(0,0,0);
+        topFive[2] = new StatEntry(0,0,0);
+        topFive[3] = new StatEntry(0,0,0);
+        topFive[4] = new StatEntry(0,0,0);
        //create a 2D array of 8 target positions
        SpaceDef[][] tempTargetPositions8 = {{new SpaceDef(4f,3f,-3.5f),new SpaceDef(4f,3f,-2.5f),new SpaceDef(4f,3f,-1.5f),new SpaceDef(4f,3f,-0.5f),new SpaceDef(4f,3f,0.5f),new SpaceDef(4f,3f,1.5f),new SpaceDef(4f,3f,2.5f),new SpaceDef(4f,3f,3.5f)},
                                            {new SpaceDef(4f,4f,-3.5f),new SpaceDef(4f,4f,-2.5f),new SpaceDef(4f,4f,-1.5f),new SpaceDef(4f,4f,-0.5f),new SpaceDef(4f,4f,0.5f),new SpaceDef(4f,4f,1.5f),new SpaceDef(4f,4f,2.5f),new SpaceDef(4f,4f,3.5f)}, 
