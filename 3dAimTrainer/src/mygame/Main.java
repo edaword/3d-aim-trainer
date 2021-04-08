@@ -15,7 +15,6 @@ import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
 import com.jme3.font.BitmapFont;
-import com.jme3.font.Rectangle;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
@@ -25,18 +24,18 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
+import com.jme3.math.Quaternion;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.renderer.RenderManager;
 
+
  
 public class Main extends SimpleApplication implements ActionListener {
     
-    //test s
-    //testtttttttttttttttttt
-    //test again
+    static final float degToRad90 = 1.570796f;
     private Spatial sceneModel;
     private BulletAppState bulletAppState;
     private RigidBodyControl landscape;
@@ -148,35 +147,42 @@ public class Main extends SimpleApplication implements ActionListener {
         hudStats.setLocalTranslation(300, hudStats.getLineHeight() * 3, 0); // position
         guiNode.attachChild(hudStats);
         
-        Node testSetting = new Node();
-        Node settings = new Node();
-        settings.attachChild(testSetting);
-        rootNode.attachChild(settings);
+        BitmapText title = new BitmapText(guiFont,false);
+        title.setSize(2);
+        title.setText("3D AIM TRAINER\nBy: Asad & Edward");
+        title.setLocalTranslation(-4,16,-24);
+        rootNode.attachChild(title);
         
-        testSetting.attachChild(makeCube("something", new SpaceDef(1,1,1)));
-        testText = new BitmapText(guiFont, false);
-        testText.setSize(1);
-        testText.setColor(ColorRGBA.Red);
-        testText.setText("3D AIM TRAINER");
-        testText.setLocalTranslation(-4,5,0);
-        testSetting.setLocalTranslation(0,4,-24);
-        testSetting.attachChild(testText);
+        
+        Node buttons = new Node();
+        rootNode.attachChild(buttons);
+        
+        buttons.attachChild(makeButton("Endless", new SpaceDef(0,4,-24), "-z"));
+        buttons.attachChild(makeButton("50 Shot Challenge", new SpaceDef(0,6,-24), "-z"));
+        
     }
     
     private Node makeButton(String text, SpaceDef pos, String direction) {
         Node container = new Node();
-        
+        container.setLocalTranslation(new Vector3f(pos.getX(),pos.getY(),pos.getZ()));
         BitmapText bText = new BitmapText(guiFont, false);
         bText.setText(text);
         bText.setColor(ColorRGBA.Red);
-        
-        container.attachChild(makeCube("cube", pos));
-        
+        bText.setSize(2);
+        container.attachChild(makeCube("cube", new SpaceDef(0,0,0)));
+        container.attachChild(bText);
         if (direction.equals("-z")) {
-            bText.setLocalTranslation(4,0,0);
-//            bText.setLocalRotation(0,0,0);
+            bText.setLocalTranslation(2,1.5f,0);
+        } else if (direction.equals("+z")) {
+            bText.setLocalTranslation(-2,0,0);
+            bText.rotate(0f,degToRad90 * 2,0f);
+        } else if (direction.equals("-x")) {
+            bText.setLocalTranslation(2,0,4);
+            bText.rotate(0f,degToRad90,0f);
+        } else if (direction.equals("+x")) {
+            bText.setLocalTranslation(-2,0,-4);
+            bText.rotate(0f,-degToRad90,0f);
         }
-        
         return container;
     }
 
