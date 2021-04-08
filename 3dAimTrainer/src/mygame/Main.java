@@ -188,7 +188,7 @@ public class Main extends SimpleApplication implements ActionListener {
         rootNode.attachChild(credits);
         
         /*//run this code everytime a 50 round game ends
-        String output = "";
+        String output = "Leaderboard:\n";
         StatEntry currentGameStats = new StatEntry(targetsHit,shotsFired,(targetsHit/shotsFired)*100);
         //only add score to the top 5 if it is better than the current
         for (int i = 0; i < 5; i++) { //use a for loop to compare each score to the new score
@@ -201,7 +201,7 @@ public class Main extends SimpleApplication implements ActionListener {
         topFive = quikSort(topFive, 0, topFive.length-1);
         //run a for loop in order to convert the array into a string so that it can be put on leaderboard wall
         for (int i = 0; i < 5; i++) {
-            output += topFive[i].getAccuracy();
+            output += i + ": + topFive[i].getAccuracy() + "\n;
         }*/
     }
     
