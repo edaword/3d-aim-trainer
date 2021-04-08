@@ -14,7 +14,6 @@ import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
-import com.jme3.font.BitmapFont;
 import com.jme3.font.Rectangle;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
@@ -50,21 +49,15 @@ public class Main extends SimpleApplication implements ActionListener {
     private AudioNode ding;
     //declare variable for the game stats
     StatEntry gameStats;
-    //declare variable for the crosshair shape
-    int crosshairIndex;
-    //create color variables for the colors that the user chose in the settings GUI
-    ColorRGBA backgroundColor = new ColorRGBA(SettingsWindow.getBR(), SettingsWindow.getBG(), 
-    SettingsWindow.getBB(), ((float)SettingsWindow.getBA()));
-    ColorRGBA targetColor = new ColorRGBA(SettingsWindow.getTR(), SettingsWindow.getTG(), 
-    SettingsWindow.getTB(), ((float)SettingsWindow.getTA()));
-    ColorRGBA crosshairColor = new ColorRGBA(SettingsWindow.getCR(), SettingsWindow.getCG(), 
-    SettingsWindow.getCB(), ((float)SettingsWindow.getCA()));
+
     //Temporary vectors used on each frame.
     //They here to avoid instanciating new vectors on each frame
     private Vector3f camDir = new Vector3f();
     private Vector3f camLeft = new Vector3f();
     //text box to hold stats
     BitmapText hudStats, testText;
+    //text box for credits wall
+    BitmapText creditsText;
     DecimalFormat twoPoints = new DecimalFormat("0.0%");
     
     static SpaceDef[][] targetPositions;
@@ -144,7 +137,7 @@ public class Main extends SimpleApplication implements ActionListener {
         hudStats = new BitmapText(guiFont, false);
         hudStats.setSize(guiFont.getCharSet().getRenderedSize() * 4);  
         hudStats.setColor(ColorRGBA.Blue);                             // font color
-        hudStats.setText("Accuracy: " + twoPoints.format((float) targetsHit / shotsFired) + "\nTargets hit: " + targetsHit + "\nShots taken: " + shotsFired);
+        hudStats.setText("Accuracy: " + twoPoints.format((float) targetsHit / shotsFired) + "\nTargets Hit: " + targetsHit + "\nShots Taken: " + shotsFired);
         hudStats.setLocalTranslation(300, hudStats.getLineHeight() * 3, 0); // position
         guiNode.attachChild(hudStats);
         
@@ -161,6 +154,29 @@ public class Main extends SimpleApplication implements ActionListener {
         testText.setLocalTranslation(-4,5,0);
         testSetting.setLocalTranslation(0,4,-24);
         testSetting.attachChild(testText);
+        
+        //create nodes for the credits text
+        Node credits = new Node();
+        Node credits2 = new Node();
+        
+        //attach childs to node and rootNode for credit text
+        credits2.attachChild(credits);
+        rootNode.attachChild(credits2);
+        
+        //attach child to credits node
+        credits.attachChild(makeCube("cube", new SpaceDef((float)0.5,(float)0.5,(float)0.5)));
+        //create and cuztomize text
+        creditsText = new BitmapText(guiFont, false);
+        creditsText.setSize((float)0.5);
+        creditsText.setColor(ColorRGBA.Green);
+        creditsText.setText("Credits!!\nThis game was created by: Edward Wang & Asad Jiwani\nApril 8th 2021"
+                + "\nProject Manager, Programmer, Technical Writer, Sound Effects: Asad Jiwani\nSystems Analyst, "
+                + "Lead Programmer, Graphics Artist: Edward Wang");
+        //move text to new location
+        creditsText.setLocalTranslation(-6,7,2);
+        credits.setLocalTranslation(2,6,-26);
+        //attach text to node as child
+        credits.attachChild(creditsText);
     }
     
     private Node makeButton(String text, SpaceDef pos, String direction) {
@@ -314,18 +330,13 @@ public class Main extends SimpleApplication implements ActionListener {
         //TODO: add render code
     }
     
-    /** A centered plus or circle sign to help the player aim. */
+    /** A centered plus sign to help the player aim. */
     protected void initCrossHairs() {
-        crosshairIndex = SettingsWindow.getCrosshairIndex();
         setDisplayStatView(false);
         guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
         BitmapText ch = new BitmapText(guiFont, false);
         ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
-        if(crosshairIndex == 0){ //if the user selected a + shape
-            ch.setText("+"); // create + shape crosshair
-        }else if (crosshairIndex == 1){ //if the user selected the o shape
-            ch.setText("o"); //create o shape crosshair
-        }
+        ch.setText("+"); // create + shape crosshair
         ch.setLocalTranslation( // center
           settings.getWidth() / 2 - ch.getLineWidth()/2,
           settings.getHeight() / 2 + ch.getLineHeight()/2, 0);
