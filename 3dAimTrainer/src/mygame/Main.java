@@ -1,7 +1,13 @@
 package mygame;
 
-import java.text.DecimalFormat;
+/*
+Asad Jiwani & Edward Wang
+April 5th, 2021
+This class contains the main class for the program. 
+It also contains all the code for the game
+ */
 
+import java.text.DecimalFormat;
 import com.jme3.app.SimpleApplication;
 import com.jme3.audio.AudioData.DataType;
 import com.jme3.audio.AudioNode;
@@ -47,15 +53,22 @@ public class Main extends SimpleApplication implements ActionListener {
     private AudioNode ding;
     //declare variable for the game stats
     StatEntry gameStats;
-
     //Temporary vectors used on each frame.
     //They here to avoid instanciating new vectors on each frame
     private Vector3f camDir = new Vector3f();
     private Vector3f camLeft = new Vector3f();
     //text box to hold stats
+<<<<<<< Updated upstream
     BitmapText hudStats;
+=======
+    BitmapText hudStats, testText;
+    //text box for credits wall
+    BitmapText creditsText;
+    //decimal format for the in game accuracy
+>>>>>>> Stashed changes
     DecimalFormat twoPoints = new DecimalFormat("0.0%");
-    
+    //create an array of stat entries for the user's top 5 scores
+    StatEntry[] topFive = new StatEntry[5];
     static SpaceDef[][] targetPositions;
     
     public static void main(String[] args) {
@@ -128,7 +141,7 @@ public class Main extends SimpleApplication implements ActionListener {
         rootNode.attachChild(shootables);
         //start with a single target in the middle
         shootables.attachChild(makeCube("original", targetPositions[2][2]));
-        
+       
         //displays stats in real time
         hudStats = new BitmapText(guiFont, false);
         hudStats.setSize(guiFont.getCharSet().getRenderedSize() * 4);  
@@ -154,11 +167,36 @@ public class Main extends SimpleApplication implements ActionListener {
         credits.setText("Credits!!\nThis game was created by: Edward Wang & Asad Jiwani\nApril 8th 2021"
                 + "\nProject Manager, Programmer, Technical Writer, Sound Effects: Asad Jiwani\nSystems Analyst, "
                 + "Lead Programmer, Graphics Artist: Edward Wang");
+<<<<<<< Updated upstream
         credits.rotate(0,degToRad90 * 2,0);
         credits.setSize(0.5f);
         credits.setLocalTranslation(0,8,24);
         rootNode.attachChild(credits);
         
+=======
+        //move text to new location
+        creditsText.setLocalTranslation(-3,7,2);
+        credits.setLocalTranslation(4,6,-24);
+        //attach text to node as child
+        credits.attachChild(creditsText);
+        
+        /*//run this code everytime a 50 round game ends
+        String output = "";
+        StatEntry currentGameStats = new StatEntry(targetsHit,shotsFired,(targetsHit/shotsFired)*100);
+        //only add score to the top 5 if it is better than the current
+        for (int i = 0; i < 5; i++) { //use a for loop to compare each score to the new score
+            //if the accuracy of the score in the top 5 rn is less than the accuracy of the new score
+            if(topFive[i].getAccuracy() < currentGameStats.getAccuracy()){
+                topFive[i] = currentGameStats; //switch the current score and the new one
+            }
+        }
+        //sort the top five array using quiksort
+        topFive = quikSort(topFive, 0, topFive.length-1);
+        //run a for loop in order to convert the array into a string so that it can be put on leaderboard wall
+        for (int i = 0; i < 5; i++) {
+            output += topFive[i].getAccuracy();
+        }*/
+>>>>>>> Stashed changes
     }
     
     private Node makeButton(String text, SpaceDef pos, String direction) {
@@ -267,10 +305,6 @@ public class Main extends SimpleApplication implements ActionListener {
         }
         hudStats.setText("Accuracy: " + twoPoints.format((float) targetsHit / shotsFired) + "\nTargets hit: " + targetsHit + "\nShots taken: " + shotsFired);
         
-    //run this code when game ends
-    //this will get the user's stats and diplay them in the game over GUI
-    //gameStats = new StatEntry(targetsHit,shotsFired); //create a new stat entry using the current game stats
-    //GameOverWindow.getGameStats(gameStats); //send this stat entry to the game over gui in order to display stats
     }
   }
   
@@ -343,6 +377,49 @@ public class Main extends SimpleApplication implements ActionListener {
         return cube;
     }
     
+    /**
+     * Sort an array of stat entries using quik sort
+     * @param a - the array containing the stat entries
+     * @param left - the left most side of the array
+     * @param right - the right most side of the array
+     * @return the sorted array
+     */
+    private static StatEntry[] quikSort(StatEntry[] a, int left, int right) {
+        //create a variable that holds a temporary value
+        StatEntry temp;
+        //base case, the left side of the array is larger than or equal to the right
+        if (left >= right) {
+            return null; //return nothing
+        }
+        //create variables for the left and right side of the array
+        int i = left;
+        int j = right;
+        //create a variable for the middle point of the array
+        StatEntry pivot = a[(left+right)/2];
+        //while the left side is less than the right
+        while (i < j) {
+            //while the number at the left side is less than the pivot
+            while (a[i].getAccuracy() < pivot.getAccuracy()) {
+                i++; //increase left side
+            }
+            while(pivot.getAccuracy() < a[j].getAccuracy()){ //while the pivot is less than the number at the j value
+                j--; //decrease right side
+            }
+            if (i <= j) { //if the left side is less than or equal to the j value
+                temp = a[i]; //move the current i value number to the temporary variable
+                a[i] = a[j]; //change the new i number to the current j number
+                a[j] = temp; //change the j number to the old i number
+                i++; //increase left side
+                j--; //increase right side
+            }
+        }
+        //recursive call
+        //keep invoking quikSort method
+        quikSort(a, left, j);
+        quikSort(a, i, right);
+        //return the sorted array
+        return a;
+    }
    
 
 }

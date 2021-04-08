@@ -15,7 +15,7 @@ public class StatEntry {
     private Date date;
     
     /**
-     * Primary constructor - accept new values for all attributes of stat entry
+     * Primary constructor - accept new values for the targetsHit and shotsFired attributes of stat entry
      * @param targetsHit - the number of targets the player hit
      * @param shotsFired - the number of total shots the player fired
      */
@@ -23,8 +23,21 @@ public class StatEntry {
         this.targetsHit = targetsHit;
         this.shotsFired = shotsFired;
         dateInMilliseconds = System.currentTimeMillis();
-        date = new Date(dateInMilliseconds);
         this.accuracy = (targetsHit/shotsFired) * 100; //calculate accuracy by dividing targets hit by shots fired and multiply by 100 to make it a percent
+    }
+    
+    /**
+     * Primary constructor - accept new values for all attributes of stat entry
+     * @param targetsHit - the number of targets the player hit
+     * @param shotsFired - the number of total shots the player fired
+     * @param accuracy - the player's accuracy in the game
+     */
+    public StatEntry(int targetsHit, int shotsFired, double accuracy){
+        this.targetsHit = targetsHit;
+        this.shotsFired = shotsFired;
+        dateInMilliseconds = System.currentTimeMillis();
+        date = new Date(dateInMilliseconds);
+        this.accuracy = accuracy; 
     }
     
     public int compareTo(StatEntry other) {
