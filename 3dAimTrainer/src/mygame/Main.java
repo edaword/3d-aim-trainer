@@ -31,6 +31,7 @@ import com.jme3.renderer.RenderManager;
 
  
 public class Main extends SimpleApplication implements ActionListener {
+    
     //test s
     //testtttttttttttttttttt
     //test again
@@ -85,8 +86,6 @@ public class Main extends SimpleApplication implements ActionListener {
                             
            targetPositions = tempTargetPositions5;
         
-       Main app = new Main();
-        app.start();
     }
     
     //node to hold spatials that can be shot
