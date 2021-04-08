@@ -14,6 +14,8 @@ import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
+import com.jme3.font.BitmapFont;
+import com.jme3.font.Rectangle;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
@@ -62,7 +64,7 @@ public class Main extends SimpleApplication implements ActionListener {
     private Vector3f camDir = new Vector3f();
     private Vector3f camLeft = new Vector3f();
     //text box to hold stats
-    BitmapText hudStats;
+    BitmapText hudStats, testText;
     DecimalFormat twoPoints = new DecimalFormat("0.0%");
     
     static SpaceDef[][] targetPositions;
@@ -85,7 +87,8 @@ public class Main extends SimpleApplication implements ActionListener {
                                            };
                             
            targetPositions = tempTargetPositions5;
-        
+        Main app = new Main();
+        app.start();
     }
     
     //node to hold spatials that can be shot
@@ -144,6 +147,37 @@ public class Main extends SimpleApplication implements ActionListener {
         hudStats.setText("Accuracy: " + twoPoints.format((float) targetsHit / shotsFired) + "\nTargets hit: " + targetsHit + "\nShots taken: " + shotsFired);
         hudStats.setLocalTranslation(300, hudStats.getLineHeight() * 3, 0); // position
         guiNode.attachChild(hudStats);
+        
+        Node testSetting = new Node();
+        Node settings = new Node();
+        settings.attachChild(testSetting);
+        rootNode.attachChild(settings);
+        
+        testSetting.attachChild(makeCube("something", new SpaceDef(1,1,1)));
+        testText = new BitmapText(guiFont, false);
+        testText.setSize(1);
+        testText.setColor(ColorRGBA.Red);
+        testText.setText("3D AIM TRAINER");
+        testText.setLocalTranslation(-4,5,0);
+        testSetting.setLocalTranslation(0,4,-24);
+        testSetting.attachChild(testText);
+    }
+    
+    private Node makeButton(String text, SpaceDef pos, String direction) {
+        Node container = new Node();
+        
+        BitmapText bText = new BitmapText(guiFont, false);
+        bText.setText(text);
+        bText.setColor(ColorRGBA.Red);
+        
+        container.attachChild(makeCube("cube", pos));
+        
+        if (direction.equals("-z")) {
+            bText.setLocalTranslation(4,0,0);
+//            bText.setLocalRotation(0,0,0);
+        }
+        
+        return container;
     }
 
     /** We over-write some navigational key mappings here, so we can
