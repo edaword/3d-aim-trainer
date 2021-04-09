@@ -86,7 +86,7 @@ public class Main extends SimpleApplication implements ActionListener {
     private BitmapText leaderboard;
     //the string that BitmapText leaderboard contains;
     String output = "Leaderboard:\n";
-    
+
     public static void main(String[] args) {
        //create a 2D array of 5 target positions
        SpaceDef[][] tempTargetPositions5 = {
@@ -378,6 +378,8 @@ public class Main extends SimpleApplication implements ActionListener {
             //get the top 5 scores from user stats
             for (int i = 0; i < 5; i++) {
                 output += i + ": " + userStats.get(i).getShotsFired() + "\n";
+                //test purposes
+                System.out.println(output);
             }
             //set that text to the leaderboard
             leaderboard.setText(output);
@@ -385,6 +387,7 @@ public class Main extends SimpleApplication implements ActionListener {
             //reset counts
             targetsHit = 0;
             shotsFired = 0;
+            
         }
         //if the user wants to shoot
         //waiting until the click ends avoids multiple inputs
@@ -546,11 +549,12 @@ public class Main extends SimpleApplication implements ActionListener {
             while (a.get(i).getShotsFired() < pivot.getShotsFired()) {
                 i++; //increase left side
             }
-            while(pivot.getShotsFired() < a.get(j).getShotsFired()){ //while the pivot is less than the number at the j value
+            //while the pivot is less than the number at the j value
+            while(pivot.getShotsFired() < a.get(j).getShotsFired()){ 
                 j--; //decrease right side
             }
             if (i <= j) { //if the left side is less than or equal to the j value
-                Collections.swap(a,left,right); //swap the two entries
+                a.set(i, a.set(j, a.get(i))); //swap the two entries
                 i++; //increase left side
                 j--; //decrease right side
             }

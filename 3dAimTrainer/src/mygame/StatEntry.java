@@ -23,11 +23,12 @@ public class StatEntry {
         this.targetsHit = targetsHit;
         this.shotsFired = shotsFired;
         dateInMilliseconds = System.currentTimeMillis();
+        date = new Date(dateInMilliseconds);
         this.accuracy = (targetsHit/shotsFired) * 100; //calculate accuracy by dividing targets hit by shots fired and multiply by 100 to make it a percent
     }
     
     /**
-     * Primary constructor - accept new values for all attributes of stat entry
+     * Seoncdary constructor - accept new values for all attributes of stat entry
      * @param targetsHit - the number of targets the player hit
      * @param shotsFired - the number of total shots the player fired
      * @param accuracy - the player's accuracy in the game
@@ -40,10 +41,17 @@ public class StatEntry {
         this.accuracy = accuracy; 
     }
     
+    /**
+     * Compare two stat entries based on their number of shots fired
+     * @param other - the other stat entry to compare with
+     * @return a positive num if the other entry is lower
+     * a 0 if both entries are equal
+     * a negative num if the other entryis higher
+     */
     public int compareTo(StatEntry other) {
-        if (accuracy > other.getAccuracy()) {
+        if (shotsFired > other.getShotsFired()) {
             return 1;
-        } else if (accuracy == other.getAccuracy()) {
+        } else if (shotsFired == other.getShotsFired()) {
             return 0;
         } else {
             return -1;
