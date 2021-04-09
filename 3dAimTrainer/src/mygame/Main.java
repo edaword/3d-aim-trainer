@@ -8,6 +8,10 @@ It also contains all the code for the game
 */
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 import com.jme3.app.SimpleApplication;
 import com.jme3.audio.AudioData.DataType;
 import com.jme3.audio.AudioNode;
@@ -34,7 +38,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
-import java.util.ArrayList;
+
 
  
 public class Main extends SimpleApplication implements ActionListener {
@@ -79,6 +83,9 @@ public class Main extends SimpleApplication implements ActionListener {
     private BitmapText leaderboard;
     //the string that BitmapText leaderboard contains;
     String output = "Leaderboard:\n";
+    //data file containg the users previous scores
+    File topScores = new File("src\\mygame\\scores.txt");
+    
     public static void main(String[] args) {
        //create a 2D array of 5 target positions
        SpaceDef[][] tempTargetPositions5 = {
@@ -200,6 +207,32 @@ public class Main extends SimpleApplication implements ActionListener {
         leaderboard.setLocalTranslation(-5,12,-24);
         //attach credits text to node
         rootNode.attachChild(leaderboard);
+        readData();
+    }
+    
+    private void readData() {
+        try{
+            //set up connection to data file containing the top five scores
+            //create Scanner to read data from file
+            
+            Scanner s = new Scanner(topScores); 
+            //create FileWriter to write to the data file
+            while(s.hasNextLine()){
+                //read in the shots fired in the data file
+                shotsFired = Integer.parseInt(s.nextLine());
+                //create a new StatEntry using the data in the data fie
+                //since the user played challenge mode, targets hit is always 50
+                StatEntry stat = new StatEntry(50, shotsFired, (float)50/shotsFired);
+                userStats.add(stat); //add the stat entry to the array list
+            }
+            
+        }catch (FileNotFoundException e){ //if file not found
+            System.out.println("Error: " + e); //print error
+        }
+    }
+    
+    private void writeData() {
+        
     }
     
     /**
@@ -309,7 +342,7 @@ public class Main extends SimpleApplication implements ActionListener {
             StatEntry currentGameStats = new StatEntry(targetsHit,shotsFired,(targetsHit/shotsFired)*100);
             
             //sort the user stats
-            quikSort(userStats);
+            quikSort(userStats, 0,userStats.size()-1);
             
             //get the top 5 scores from user stats
             for (int i = 0; i < 5; i++) {
