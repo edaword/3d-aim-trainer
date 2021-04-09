@@ -140,6 +140,7 @@ public class Main extends SimpleApplication implements ActionListener {
         landscape = new RigidBodyControl(sceneShape, 0);
         sceneModel.addControl(landscape);
         
+        //add code to cuztomize the player in the game
         CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1.5f, 6f, 1);
         player = new CharacterControl(capsuleShape, 0.05f);
         player.setJumpSpeed(20);
@@ -193,20 +194,25 @@ public class Main extends SimpleApplication implements ActionListener {
         //attach credits text to node
         rootNode.attachChild(credits);
         
+        //create text to show if the user chose endless mode
         state = new BitmapText(guiFont, false);
         state.setText("Endless");
+        //cuztomize text
         state.setSize(2f);
+        //move to new location and rotate
         state.setLocalTranslation(24,16,0);
         state.rotate(0,-degToRad90, 0);
+        //attach to node
         rootNode.attachChild(state);
         
+        //create text for the leaderboard wall
         leaderboard = new BitmapText(guiFont,false);
         leaderboard.setText(output);
         //cuztomize leaderboard wall text
         leaderboard.rotate(0,degToRad90 * 2,0);
         leaderboard.setSize(0.5f);
         leaderboard.setLocalTranslation(-5,12,-24);
-        //attach credits text to node
+        //attach leaderboard text to node
         rootNode.attachChild(leaderboard);
         readData();
     }
