@@ -352,7 +352,7 @@ public class Main extends SimpleApplication implements ActionListener {
       if (isPressed) { player.jump(new Vector3f(0,20f,0));} //write code to allow user to jump
     } else if (binding.equals("Shoot") && !isPressed) {
         //if the user has hit 50 targets, the game ends
-        if (targetsHit >=50 && challengeMode) {
+        if (targetsHit >= 50 && challengeMode) {
             challengeMode = false;
 
             //run this code everytime a 50 round game ends
@@ -361,20 +361,17 @@ public class Main extends SimpleApplication implements ActionListener {
             //add it to the arrayList userStats
             userStats.add(currentGameStats);
             //sort the user stats
-           quikSort(userStats, 0,userStats.size()-1);
-            
+            quikSort(userStats, 0,userStats.size()-1);
+            //write the new records to the data file
             writeData();
 
             //get the top 5 scores from user stats
             for (int i = 0; i < 5; i++) {
-                output += i + ":" + userStats.get(i).getAccuracy() + "\n";
+                output += i + ": " + userStats.get(i).getShotsFired() + "\n";
             }
             //set that text to the leaderboard
             leaderboard.setText(output);
-            
-            //write the new records to the data file
-            
-            
+
             //reset counts
             targetsHit = 0;
             shotsFired = 0;
@@ -408,8 +405,9 @@ public class Main extends SimpleApplication implements ActionListener {
                 //if the user clicked the endless button
                 ///quit challenge mode
                 challengeMode = false;
-                //the shot doesn't count
-                shotsFired--;
+                //reset stats
+                shotsFired = 0;
+                targetsHit = 0;
                 state.setText("Endless");
                 
             } else if (closestID.equals("50 Shot Challenge")) {
@@ -514,11 +512,11 @@ public class Main extends SimpleApplication implements ActionListener {
     }
     
     /**
-     * Sort an array of stat entries using quik sort
-     * @param a - the array containing the stat entries
-     * @param left - the left most side of the array
-     * @param right - the right most side of the array
-     * @return the sorted array
+     * Sort an arraylist of stat entries using quik sort
+     * @param a - the arraylist containing the stat entries
+     * @param left - the left most side of the arraylist
+     * @param right - the right most side of the arraylist
+     * @return the sorted arraylist
      */
     private static ArrayList<StatEntry> quikSort(ArrayList<StatEntry> a, int left, int right) {
         //create a variable that holds a temporary value
