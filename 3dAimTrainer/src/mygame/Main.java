@@ -73,8 +73,9 @@ public class Main extends SimpleApplication implements ActionListener {
     private static SpaceDef[][] targetPositions;
     //whether the user is playing the 50 shot challenge or not
     private boolean challengeMode;
+    //whether the user is in endless or challenge mode
     private BitmapText state;
-    
+    String output = "Leaderboard:\n";
     public static void main(String[] args) {
        //create a 2D array of 5 target positions
        SpaceDef[][] tempTargetPositions5 = {
@@ -90,6 +91,30 @@ public class Main extends SimpleApplication implements ActionListener {
         Main app = new Main();
         app.start();
     }
+    /*//run this code everytime a 50 round game ends
+        StatEntry currentGameStats = new StatEntry(targetsHit,shotsFired,(targetsHit/shotsFired)*100);
+        //only add score to the top 5 if it is better than the current
+        for (int i = 0; i < 5; i++) { //use a for loop to compare each score to the new score
+            //if the accuracy of the score in the top 5 rn is less than the accuracy of the new score
+            if(topFive[i].getAccuracy() < currentGameStats.getAccuracy()){
+                topFive[i] = currentGameStats; //switch the current score and the new one
+            }
+        }
+        //sort the top five array using quiksort
+        topFive = quikSort(topFive, 0, topFive.length-1);
+        //run a for loop in order to convert the array into a string so that it can be put on leaderboard wall
+        for (int i = 0; i < 5; i++) {
+            output += i + ": + topFive[i].getAccuracy() + "\n;
+        }
+        //text box for leaderboard wall
+        BitmapText leaderboard = new BitmapText(guiFont,false);
+        leaderboard.setText(output);
+        //cuztomize leaderboard wall text
+        leaderboard.rotate(0,degToRad90 * 2,0);
+        leaderboard.setSize(0.5f);
+        leaderboard.setLocalTranslation(-5,12,-24);
+        //attach credits text to node
+        rootNode.attachChild(leaderboard);*/
     
     //node to hold spatials that can be shot
     private Node shootables;
@@ -174,9 +199,11 @@ public class Main extends SimpleApplication implements ActionListener {
         credits.setText("Credits!!\nThis game was created by: Edward Wang & Asad Jiwani\nApril 8th 2021"
                 + "\nProject Manager, Programmer, Technical Writer, Sound Effects: Asad Jiwani\nSystems Analyst, "
                 + "Lead Programmer, Graphics Artist: Edward Wang");
+        //cuztomize credits wall text
         credits.rotate(0,degToRad90 * 2,0);
         credits.setSize(0.5f);
         credits.setLocalTranslation(0,8,24);
+        //attach credits text to node
         rootNode.attachChild(credits);
         
         
