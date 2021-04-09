@@ -5,7 +5,7 @@ Asad Jiwani & Edward Wang
 April 5th, 2021
 This class contains the main class for the program. 
 It also contains all the code for the game
- */
+*/
 
 import java.text.DecimalFormat;
 import com.jme3.app.SimpleApplication;
@@ -20,7 +20,6 @@ import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
-import com.jme3.font.Rectangle;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
@@ -30,11 +29,12 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
-import com.jme3.renderer.RenderManager;
+import java.util.ArrayList;
 
  
 public class Main extends SimpleApplication implements ActionListener {
@@ -67,8 +67,8 @@ public class Main extends SimpleApplication implements ActionListener {
     private BitmapText hudStats;
     //decimal format for the in game accuracy
     private DecimalFormat twoPoints = new DecimalFormat("0.0%");
-    //create an array of stat entries for the user's top 5 scores
-    private StatEntry[] topFive = new StatEntry[5];
+    //create an array list of stat entries for the user's stats
+    private static ArrayList<StatEntry> userStats = new ArrayList<StatEntry>();
     //an array that holds all the positions of the targets
     private static SpaceDef[][] targetPositions;
     //whether the user is playing the 50 shot challenge or not
