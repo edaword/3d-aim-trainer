@@ -38,14 +38,10 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
-<<<<<<< Updated upstream
-
-=======
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
->>>>>>> Stashed changes
 
  
 public class Main extends SimpleApplication implements ActionListener {
@@ -107,46 +103,8 @@ public class Main extends SimpleApplication implements ActionListener {
         //start game
         Main app = new Main();
         app.start();
-<<<<<<< Updated upstream
-=======
+
         
-        try{
-            //set up connection to data file containing the top scores
-            //create Scanner to read data from file
-            InputStream in = Main.class.getResourceAsStream("scores.txt");
-            Scanner s = new Scanner(in); 
-            //while there is data in the file
-            while(s.hasNextLine()){
-                //read in the shots fired in the data file
-                shotsFired = Integer.parseInt(s.nextLine());
-                //create a new StatEntry using the data in the data fie
-                //since the user played challenge mode, targets hit is always 50
-                StatEntry stat = new StatEntry(50, shotsFired, 50/shotsFired);
-                userStats.add(stat); //add the stat entry to the array list
-            }
-            
-        }catch (Exception e){ //if file not found
-            System.out.println("Error: " + e); //print error
-        }
-        
-        /*//run this code everytime a 50 round game ends
-        StatEntry currentGameStats = new StatEntry(targetsHit,shotsFired,(targetsHit/shotsFired)*100);
-        //add the new stat entry from game to array list
-        userStats.add(currentGameStats);
-        //sort the arraylist using quiksort
-        userStats = quikSort(userStats, 0, userStats.getSize()-1);
-        
-        //write the new best scores to the data file
-        //text box for leaderboard wall
-        BitmapText leaderboard = new BitmapText(guiFont,false);
-        leaderboard.setText(output);
-        //cuztomize leaderboard wall text
-        leaderboard.rotate(0,degToRad90 * 2,0);
-        leaderboard.setSize(0.5f);
-        leaderboard.setLocalTranslation(-5,12,-24);
-        //attach credits text to node
-        rootNode.attachChild(leaderboard);*/
->>>>>>> Stashed changes
     }
     
     //node to hold spatials that can be shot
@@ -259,21 +217,21 @@ public class Main extends SimpleApplication implements ActionListener {
     
     private void readData() {
         try{
-            //set up connection to data file containing the top five scores
+            //set up connection to data file containing the top scores
             //create Scanner to read data from file
-            
-            Scanner s = new Scanner(topScores); 
-            //create FileWriter to write to the data file
+            InputStream in = Main.class.getResourceAsStream("scores.txt");
+            Scanner s = new Scanner(in); 
+            //while there is data in the file
             while(s.hasNextLine()){
                 //read in the shots fired in the data file
                 shotsFired = Integer.parseInt(s.nextLine());
                 //create a new StatEntry using the data in the data fie
                 //since the user played challenge mode, targets hit is always 50
-                StatEntry stat = new StatEntry(50, shotsFired, (float)50/shotsFired);
+                StatEntry stat = new StatEntry(50, shotsFired, 50/shotsFired);
                 userStats.add(stat); //add the stat entry to the array list
             }
             
-        }catch (FileNotFoundException e){ //if file not found
+        }catch (Exception e){ //if file not found
             System.out.println("Error: " + e); //print error
         }
     }
@@ -384,20 +342,15 @@ public class Main extends SimpleApplication implements ActionListener {
     } else if (binding.equals("Shoot") && !isPressed) {
         if (targetsHit >=50 && challengeMode) {
             challengeMode = false;
-            
+
             //run this code everytime a 50 round game ends
             StatEntry currentGameStats = new StatEntry(targetsHit,shotsFired,(targetsHit/shotsFired)*100);
+            //add the new stat entry from game to array list
+        userStats.add(currentGameStats);
+        //sort the arraylist using quiksort
+        userStats = quikSort(userStats, 0, userStats.size()-1);
             
-            //sort the user stats
-            quikSort(userStats, 0,userStats.size()-1);
-            
-            //get the top 5 scores from user stats
-            for (int i = 0; i < 5; i++) {
-                output += i + ":" + userStats.get(i).getAccuracy() + "\n";
-            }
             //text box for leaderboard wall
-            
-            leaderboard.setText(output);
             
             targetsHit = 0;
             shotsFired = 0;
@@ -567,7 +520,7 @@ public class Main extends SimpleApplication implements ActionListener {
             if (i <= j) { //if the left side is less than or equal to the j value
                 Collections.swap(a,left,right); //swap the two entries
                 i++; //increase left side
-                j--; //increase right side
+                j--; //decrease right side
             }
         }
         //recursive call
