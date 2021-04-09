@@ -38,7 +38,14 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
+<<<<<<< Updated upstream
 
+=======
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
+>>>>>>> Stashed changes
 
  
 public class Main extends SimpleApplication implements ActionListener {
@@ -57,7 +64,7 @@ public class Main extends SimpleApplication implements ActionListener {
     private Vector3f walkDirection = new Vector3f();
     private boolean left = false, right = false, up = false, down = false;
     //declare counter variables
-    private int targetsHit, shotsFired;
+    private static int targetsHit, shotsFired;
     //create AudioNodes for sound effects
     private AudioNode gunshot;
     private AudioNode ding;
@@ -100,6 +107,46 @@ public class Main extends SimpleApplication implements ActionListener {
         //start game
         Main app = new Main();
         app.start();
+<<<<<<< Updated upstream
+=======
+        
+        try{
+            //set up connection to data file containing the top scores
+            //create Scanner to read data from file
+            InputStream in = Main.class.getResourceAsStream("scores.txt");
+            Scanner s = new Scanner(in); 
+            //while there is data in the file
+            while(s.hasNextLine()){
+                //read in the shots fired in the data file
+                shotsFired = Integer.parseInt(s.nextLine());
+                //create a new StatEntry using the data in the data fie
+                //since the user played challenge mode, targets hit is always 50
+                StatEntry stat = new StatEntry(50, shotsFired, 50/shotsFired);
+                userStats.add(stat); //add the stat entry to the array list
+            }
+            
+        }catch (Exception e){ //if file not found
+            System.out.println("Error: " + e); //print error
+        }
+        
+        /*//run this code everytime a 50 round game ends
+        StatEntry currentGameStats = new StatEntry(targetsHit,shotsFired,(targetsHit/shotsFired)*100);
+        //add the new stat entry from game to array list
+        userStats.add(currentGameStats);
+        //sort the arraylist using quiksort
+        userStats = quikSort(userStats, 0, userStats.getSize()-1);
+        
+        //write the new best scores to the data file
+        //text box for leaderboard wall
+        BitmapText leaderboard = new BitmapText(guiFont,false);
+        leaderboard.setText(output);
+        //cuztomize leaderboard wall text
+        leaderboard.rotate(0,degToRad90 * 2,0);
+        leaderboard.setSize(0.5f);
+        leaderboard.setLocalTranslation(-5,12,-24);
+        //attach credits text to node
+        rootNode.attachChild(leaderboard);*/
+>>>>>>> Stashed changes
     }
     
     //node to hold spatials that can be shot
@@ -496,31 +543,29 @@ public class Main extends SimpleApplication implements ActionListener {
      * @param right - the right most side of the array
      * @return the sorted array
      */
-    private static StatEntry[] quikSort(StatEntry[] a, int left, int right) {
+    private static ArrayList<StatEntry> quikSort(ArrayList<StatEntry> a, int left, int right) {
         //create a variable that holds a temporary value
         StatEntry temp;
-        //base case, the left side of the array is larger than or equal to the right
+        //base case, the left side of the arraylist is larger than or equal to the right
         if (left >= right) {
-            return null; //return nothing
+            return a; //return the array list
         }
-        //create variables for the left and right side of the array
+        //create variables for the left and right side of the arraylist
         int i = left;
         int j = right;
-        //create a variable for the middle point of the array
-        StatEntry pivot = a[(left+right)/2];
+        //create a variable for the middle point of the arraylist
+        StatEntry pivot = a.get((left+right)/2);
         //while the left side is less than the right
         while (i < j) {
             //while the number at the left side is less than the pivot
-            while (a[i].getAccuracy() < pivot.getAccuracy()) {
+            while (a.get(i).getShotsFired() < pivot.getShotsFired()) {
                 i++; //increase left side
             }
-            while(pivot.getAccuracy() < a[j].getAccuracy()){ //while the pivot is less than the number at the j value
+            while(pivot.getShotsFired() < a.get(j).getShotsFired()){ //while the pivot is less than the number at the j value
                 j--; //decrease right side
             }
             if (i <= j) { //if the left side is less than or equal to the j value
-                temp = a[i]; //move the current i value number to the temporary variable
-                a[i] = a[j]; //change the new i number to the current j number
-                a[j] = temp; //change the j number to the old i number
+                Collections.swap(a,left,right); //swap the two entries
                 i++; //increase left side
                 j--; //increase right side
             }
@@ -529,7 +574,7 @@ public class Main extends SimpleApplication implements ActionListener {
         //keep invoking quikSort method
         quikSort(a, left, j);
         quikSort(a, i, right);
-        //return the sorted array
+        //return the sorted arraylist
         return a;
     }
 }
