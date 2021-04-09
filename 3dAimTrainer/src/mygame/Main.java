@@ -40,42 +40,42 @@ import com.jme3.renderer.RenderManager;
 public class Main extends SimpleApplication implements ActionListener {
     //create variable that holds te value of 90 degrees in radian form
     static final float degToRad90 = 1.570796f;
-    //variables for game scene and control
+    //the mesh of the scene
     private Spatial sceneModel;
+    //bullet physics engine
     private BulletAppState bulletAppState;
+    //physics controller for the scene
     private RigidBodyControl landscape;
+    //physics controller for the player
     private CharacterControl player;
+    //the direction the player is walking in
+    //a vector of 3 numbers, the x,y, and z direction of movement
     private Vector3f walkDirection = new Vector3f();
     private boolean left = false, right = false, up = false, down = false;
     //declare counter variables
-    int targetsHit, shotsFired;
+    private int targetsHit, shotsFired;
     //create AudioNodes for sound effects
     private AudioNode gunshot;
     private AudioNode ding;
     //declare variable for the game stats
-    StatEntry gameStats;
-    //Temporary vectors used on each frame.
+    private StatEntry gameStats;
+    //Temporary vectors used on each frame that hold the direction the player is moving in
     //They here to avoid instanciating new vectors on each frame
     private Vector3f camDir = new Vector3f();
     private Vector3f camLeft = new Vector3f();
     //text box to hold stats
-    BitmapText hudStats;
+    private BitmapText hudStats;
     //decimal format for the in game accuracy
-    DecimalFormat twoPoints = new DecimalFormat("0.0%");
+    private DecimalFormat twoPoints = new DecimalFormat("0.0%");
     //create an array of stat entries for the user's top 5 scores
-    StatEntry[] topFive = new StatEntry[5];
-    static SpaceDef[][] targetPositions;
+    private StatEntry[] topFive = new StatEntry[5];
+    //an array that holds all the positions of the targets
+    private static SpaceDef[][] targetPositions;
+    //whether the user is playing the 50 shot challenge or not
+    private boolean challengeMode;
+    private BitmapText state;
     
     public static void main(String[] args) {
-       //create a 2D array of 8 target positions
-       SpaceDef[][] tempTargetPositions8 = {{new SpaceDef(4f,3f,-3.5f),new SpaceDef(4f,3f,-2.5f),new SpaceDef(4f,3f,-1.5f),new SpaceDef(4f,3f,-0.5f),new SpaceDef(4f,3f,0.5f),new SpaceDef(4f,3f,1.5f),new SpaceDef(4f,3f,2.5f),new SpaceDef(4f,3f,3.5f)},
-                                           {new SpaceDef(4f,4f,-3.5f),new SpaceDef(4f,4f,-2.5f),new SpaceDef(4f,4f,-1.5f),new SpaceDef(4f,4f,-0.5f),new SpaceDef(4f,4f,0.5f),new SpaceDef(4f,4f,1.5f),new SpaceDef(4f,4f,2.5f),new SpaceDef(4f,4f,3.5f)}, 
-                                           {new SpaceDef(4f,5f,-3.5f),new SpaceDef(4f,5f,-2.5f),new SpaceDef(4f,5f,-1.5f),new SpaceDef(4f,5f,-0.5f),new SpaceDef(4f,5f,0.5f),new SpaceDef(4f,5f,1.5f),new SpaceDef(4f,5f,2.5f),new SpaceDef(4f,5f,3.5f)},
-                                           {new SpaceDef(4f,6f,-3.5f),new SpaceDef(4f,6f,-2.5f),new SpaceDef(4f,6f,-1.5f),new SpaceDef(4f,6f,-0.5f),new SpaceDef(4f,6f,0.5f),new SpaceDef(4f,6f,1.5f),new SpaceDef(4f,6f,2.5f),new SpaceDef(4f,6f,3.5f)},
-                                           {new SpaceDef(4f,7f,-3.5f),new SpaceDef(4f,7f,-2.5f),new SpaceDef(4f,7f,-1.5f),new SpaceDef(4f,7f,-0.5f),new SpaceDef(4f,7f,0.5f),new SpaceDef(4f,7f,1.5f),new SpaceDef(4f,7f,2.5f),new SpaceDef(4f,7f,3.5f)},
-                                           {new SpaceDef(4f,8f,-3.5f),new SpaceDef(4f,8f,-2.5f),new SpaceDef(4f,8f,-1.5f),new SpaceDef(4f,8f,-0.5f),new SpaceDef(4f,8f,0.5f),new SpaceDef(4f,8f,1.5f),new SpaceDef(4f,8f,2.5f),new SpaceDef(4f,8f,3.5f)},
-                                           {new SpaceDef(4f,9f,-3.5f),new SpaceDef(4f,9f,-2.5f),new SpaceDef(4f,9f,-1.5f),new SpaceDef(4f,9f,-0.5f),new SpaceDef(4f,9f,0.5f),new SpaceDef(4f,9f,1.5f),new SpaceDef(4f,9f,2.5f),new SpaceDef(4f,9f,3.5f)},
-                                           {new SpaceDef(4f,10f,-3.5f),new SpaceDef(4f,10f,-2.5f),new SpaceDef(4f,10f,-1.5f),new SpaceDef(4f,10f,-0.5f),new SpaceDef(4f,10f,0.5f),new SpaceDef(4f,10f,1.5f),new SpaceDef(4f,10f,2.5f),new SpaceDef(4f,10f,3.5f)}};
        //create a 2D array of 5 target positions
        SpaceDef[][] tempTargetPositions5 = {
                                             {new SpaceDef(20f,3f,-2),new SpaceDef(20f,3f,-1),new SpaceDef(20f,3f,0),new SpaceDef(20f,3f,1),new SpaceDef(20f,3f,2)},
@@ -99,23 +99,22 @@ public class Main extends SimpleApplication implements ActionListener {
      * Initialize the main game code
      */
     public void simpleInitApp() {
-
+        //the user has not started the 50 shot challenge yet
+        challengeMode = false;
         //set counter variables to 0
         shotsFired = 0;
         targetsHit = 0;
         
-        //set rotation speed for camera
+        //set rotation speed for camera (mouse sensitivity)
         flyCam.setRotationSpeed(1);
         
         /** Set up Physics */
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
-        //bulletAppState.setDebugEnabled(true);
-
         
         // We re-use the flyby camera for rotation, while positioning is handled by physics
         viewPort.setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
-        flyCam.setMoveSpeed(100);
+//        flyCam.setMoveSpeed(100);
         initCrossHairs(); // a "+" in the middle of the screen to help aiming
         setUpKeys();
         //invoke method to initialize the audio soundeffects
@@ -144,7 +143,7 @@ public class Main extends SimpleApplication implements ActionListener {
         shootables = new Node("Shootables");
         rootNode.attachChild(shootables); //attach node to main node
         //start with a single target in the middle
-        shootables.attachChild(makeCube("original", targetPositions[2][2]));
+        shootables.attachChild(makeCube("target", targetPositions[2][2], ColorRGBA.Orange));
        
         //displays stats in real time
         hudStats = new BitmapText(guiFont, false);
@@ -180,22 +179,13 @@ public class Main extends SimpleApplication implements ActionListener {
         credits.setLocalTranslation(0,8,24);
         rootNode.attachChild(credits);
         
-        /*//run this code everytime a 50 round game ends
-        String output = "";
-        StatEntry currentGameStats = new StatEntry(targetsHit,shotsFired,(targetsHit/shotsFired)*100);
-        //only add score to the top 5 if it is better than the current
-        for (int i = 0; i < 5; i++) { //use a for loop to compare each score to the new score
-            //if the accuracy of the score in the top 5 rn is less than the accuracy of the new score
-            if(topFive[i].getAccuracy() < currentGameStats.getAccuracy()){
-                topFive[i] = currentGameStats; //switch the current score and the new one
-            }
-        }
-        //sort the top five array using quiksort
-        topFive = quikSort(topFive, 0, topFive.length-1);
-        //run a for loop in order to convert the array into a string so that it can be put on leaderboard wall
-        for (int i = 0; i < 5; i++) {
-            output += topFive[i].getAccuracy();
-        }*/
+        
+        state = new BitmapText(guiFont, false);
+        state.setText("Endless");
+        state.setSize(2f);
+        state.setLocalTranslation(24,16,0);
+        state.rotate(0,-degToRad90, 0);
+        rootNode.attachChild(state);
     }
     
     /**
@@ -216,7 +206,11 @@ public class Main extends SimpleApplication implements ActionListener {
         bText.setColor(ColorRGBA.Red);
         bText.setSize(2);
         //make cubes so that the user has something to shoot
-        container.attachChild(makeCube("cube", new SpaceDef(0,0,0)));
+        Geometry cube = makeCube(text, new SpaceDef(0,0,0), ColorRGBA.Red);
+        //add an identical (but transparent) cube at the same position in the 
+        //  shootables node so the user can click it.
+        shootables.attachChild(makeCube(text, pos, new ColorRGBA(0f,0f,0f,0f)));
+        container.attachChild(cube);
         //attach text to cube
         container.attachChild(bText);
         //set the location of the text based on the direction parameter
@@ -256,7 +250,7 @@ public class Main extends SimpleApplication implements ActionListener {
   }
 
   /**
-   * Initialize all the aduio sounds for the game
+   * Initialize all the audio sounds for the game
    */
   private void initAudio(){
       //create node for the audio
@@ -293,7 +287,13 @@ public class Main extends SimpleApplication implements ActionListener {
       down = isPressed;
     } else if (binding.equals("Jump")) { //if the user wants to jump
       if (isPressed) { player.jump(new Vector3f(0,20f,0));} //write code to allow user to jump
-    } else if (binding.equals("Shoot") && !isPressed) { //if the user wants to shoot and they did not press any other keys
+    } else if (binding.equals("Shoot") && !isPressed) {
+        if (targetsHit >=50 && challengeMode) {
+            challengeMode = false;
+            
+        }
+        //if the user wants to shoot
+        //waiting until the click ends avoids multiple inputs
         //play the gunshot sound
         gunshot.playInstance();
         //add one to the total shots counter
@@ -304,30 +304,41 @@ public class Main extends SimpleApplication implements ActionListener {
         Ray ray = new Ray(cam.getLocation(), cam.getDirection());
         // 3. Collect intersections between the Ray and objects in the shootables node in results list.
         shootables.collideWith(ray, results);
-        // 4. Print the results
-        System.out.println("----- Collisions? " + results.size() + "-----");
-        for (int i = 0; i < results.size(); i++) {
-          // For each hit, we know distance, impact point, name of geometry.
-          float dist = results.getCollision(i).getDistance();
-          Vector3f pt = results.getCollision(i).getContactPoint();
-          String hit = results.getCollision(i).getGeometry().getName();
-          System.out.println("* Collision #" + i);
-          System.out.println("  You shot " + hit + " at " + pt + ", " + dist + " wu away.");
-        }
         // 5. If something was hit
         if (results.size() > 0) {
-          ding.playInstance(); //play ding sound effect
-          //add one to the num targets hit counter
-          targetsHit++;
-          // The closest collision point is what was truly hit:
-          CollisionResult closest = results.getClosestCollision();
-          //remove it from shootables
-          shootables.detachChild(closest.getGeometry());
-          newTarget();
+            ding.playInstance(); //play ding sound effect
+            // The closest collision point is what was truly hit:
+            CollisionResult closest = results.getClosestCollision();
+            String closestID = closest.getGeometry().getName();
+            if (closestID.equals("target")) {
+                //add one to the num targets hit counter
+                targetsHit++;
+                //remove it from shootables (removes it from the scene)
+                shootables.detachChild(closest.getGeometry());
+                //make a new target in a random position
+                newTarget();
+            } else if (closestID.equals("Endless")) {
+                //if the user clicked the endless button
+                ///quit challenge mode
+                challengeMode = false;
+                //the shot doesn't count
+                shotsFired--;
+                state.setText("Endless");
+                
+            } else if (closestID.equals("50 Shot Challenge")) {
+                //enter or stay in challenge mode
+                challengeMode = true;
+                //the shot doesn't count
+                shotsFired = 0;
+                targetsHit = 0;
+            }
+            
         }
         //update stats in real time
         hudStats.setText("Accuracy: " + twoPoints.format((float) targetsHit / shotsFired) + "\nTargets hit: " + targetsHit + "\nShots taken: " + shotsFired);
-        
+        if (challengeMode) {
+            state.setText("Challenge mode:\n" + (50 - targetsHit) + " targets left!"); 
+        }
     }
   }
   /**
@@ -336,12 +347,11 @@ public class Main extends SimpleApplication implements ActionListener {
   public void newTarget() {
       //position variables for target
       int xPos, yPos;
-      System.out.println(targetPositions.length);
       //randomize position for target
       xPos = (int) (Math.random() * (targetPositions.length));
       yPos = (int) (Math.random() * (targetPositions.length));
       //attach to node
-      shootables.attachChild(makeCube("target", targetPositions[xPos][yPos]));
+      shootables.attachChild(makeCube("target", targetPositions[xPos][yPos], ColorRGBA.Orange));
   }
 
   /**
@@ -400,9 +410,10 @@ public class Main extends SimpleApplication implements ActionListener {
      * Make a cube for target practice
      * @param name - name of the cube
      * @param pos - position of the cube
+     * @param color - the color of the cube
      * @return the cube made for target practice
      */
-    protected Geometry makeCube(String name, SpaceDef pos) {
+    protected Geometry makeCube(String name, SpaceDef pos, ColorRGBA color) {
         Box box = new Box(0.5f, 0.5f, 0.5f); //create box using built in methods
         //create new geomtery using the box above
         Geometry cube = new Geometry(name, box);
@@ -410,7 +421,7 @@ public class Main extends SimpleApplication implements ActionListener {
         cube.setLocalTranslation(pos.getX(), pos.getY(), pos.getZ());
         //load data from asset folder
         Material mat1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat1.setColor("Color", ColorRGBA.randomColor()); //randomize color of cube
+        mat1.setColor("Color", color); //randomize color of cube
         cube.setMaterial(mat1);
         return cube; //return the cube
     }
