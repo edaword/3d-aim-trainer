@@ -214,7 +214,16 @@ public class Main extends SimpleApplication implements ActionListener {
         leaderboard.setLocalTranslation(-5,12,-24);
         //attach leaderboard text to node
         rootNode.attachChild(leaderboard);
+        //read the data currently in the data file
+        //invoking this method will add data to the userStats arraylist
         readData();
+        /*use a for loop to iterate through each elements of the array list and get
+        /shots fired for each entry*/
+        for (int i = 0; i < userStats.size(); i++) {
+            output += userStats.get(i).getShotsFired();
+        }
+        //set the leaderboard wall text to the shots fired for each stat entry in the arraylist
+        leaderboard.setText(output);
     }
     
     /**
@@ -232,7 +241,7 @@ public class Main extends SimpleApplication implements ActionListener {
                 shotsFired = Integer.parseInt(s.nextLine());
                 //create a new StatEntry using the data in the data fie
                 //since the user played challenge mode, targets hit is always 50
-                StatEntry stat = new StatEntry(50, shotsFired, 50/shotsFired);
+                StatEntry stat = new StatEntry(50, shotsFired, (50/shotsFired)*100);
                 userStats.add(stat); //add the stat entry to the array list
             }
             
@@ -367,8 +376,9 @@ public class Main extends SimpleApplication implements ActionListener {
 
             //run this code everytime a 50 round game ends
             //store their stats from this round
-            StatEntry currentGameStats = new StatEntry(targetsHit,shotsFired,(targetsHit/shotsFired)*100);
-            //add it to the arrayList userStats
+            //since theyplayed a 50 round game, targets hit is always 50
+            StatEntry currentGameStats = new StatEntry(50,shotsFired,(50/shotsFired)*100);
+            //add it to the arrayList of userStats
             userStats.add(currentGameStats);
             //sort the user stats
             quikSort(userStats, 0,userStats.size()-1);
@@ -377,10 +387,11 @@ public class Main extends SimpleApplication implements ActionListener {
 
             //get the top 5 scores from user stats
             for (int i = 0; i < 5; i++) {
+                //assign each shots fired from the stat entry to the output variables
                 output += i + ": " + userStats.get(i).getShotsFired() + "\n";
                 //test purposes
                 System.out.println(output);
-            }
+            } 
             //set that text to the leaderboard
             leaderboard.setText(output);
 
