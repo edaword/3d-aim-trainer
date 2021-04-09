@@ -8,11 +8,9 @@ the number of shots fired and the player accuracy
 import java.util.Date;
 
 public class StatEntry {
-    private long dateInMilliseconds;
     private int targetsHit;
     private int shotsFired;
     private double accuracy;
-    private Date date;
     
     /**
      * Primary constructor - accept new values for the targetsHit and shotsFired attributes of stat entry
@@ -22,8 +20,6 @@ public class StatEntry {
     public StatEntry(int targetsHit, int shotsFired){
         this.targetsHit = targetsHit;
         this.shotsFired = shotsFired;
-        dateInMilliseconds = System.currentTimeMillis();
-        date = new Date(dateInMilliseconds);
         this.accuracy = (targetsHit/shotsFired) * 100; //calculate accuracy by dividing targets hit by shots fired and multiply by 100 to make it a percent
     }
     
@@ -36,8 +32,6 @@ public class StatEntry {
     public StatEntry(int targetsHit, int shotsFired, double accuracy){
         this.targetsHit = targetsHit;
         this.shotsFired = shotsFired;
-        dateInMilliseconds = System.currentTimeMillis();
-        date = new Date(dateInMilliseconds);
         this.accuracy = accuracy; 
     }
     
@@ -107,28 +101,12 @@ public class StatEntry {
     }
     
     /**
-     * Mutator method for the dateInMilliseconds the player played the game
-     * @param dateInMilliseconds - the dateInMilliseconds the player played the game
-     */
-    public void setDateInMilliseconds(long dateInMilliseconds){
-        this.dateInMilliseconds = dateInMilliseconds;
-    }
-    
-    /**
-     * Accessor method for the dateInMilliseconds the player played the game
-     * @return the dateInMilliseconds the player played the game
-     */
-    public long getDateInMilliseconds(){
-        return dateInMilliseconds;
-    }
-    
-    /**
      * Create a String representation of all stat entry attributes
      * @return a String representation of all stat entry attributes
      */
     public String toString(){
-        return "Shots Fired: " + shotsFired + "\nTargets Hit: " + targetsHit + "\nAccuracy: " + accuracy +
-                "\nDate: " + date;
+        return "Shots Fired: " + shotsFired + "\nTargets Hit: " + targetsHit + 
+                "\nAccuracy: " + accuracy;
     }
     
     /**
@@ -136,7 +114,7 @@ public class StatEntry {
      * @return a new StatEntry with same attribute values as this one
      */
     public StatEntry clone(){
-        StatEntry clone = new StatEntry(targetsHit, shotsFired);
+        StatEntry clone = new StatEntry(targetsHit, shotsFired, accuracy);
         return clone;
     }
     
