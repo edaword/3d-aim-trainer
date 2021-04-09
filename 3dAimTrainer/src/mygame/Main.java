@@ -75,6 +75,9 @@ public class Main extends SimpleApplication implements ActionListener {
     private boolean challengeMode;
     //whether the user is in endless or challenge mode
     private BitmapText state;
+    //displays the top 5 scores
+    private BitmapText leaderboard;
+    //the string that BitmapText leaderboard contains;
     String output = "Leaderboard:\n";
     public static void main(String[] args) {
        //create a 2D array of 5 target positions
@@ -91,30 +94,6 @@ public class Main extends SimpleApplication implements ActionListener {
         Main app = new Main();
         app.start();
     }
-    /*//run this code everytime a 50 round game ends
-        StatEntry currentGameStats = new StatEntry(targetsHit,shotsFired,(targetsHit/shotsFired)*100);
-        //only add score to the top 5 if it is better than the current
-        for (int i = 0; i < 5; i++) { //use a for loop to compare each score to the new score
-            //if the accuracy of the score in the top 5 rn is less than the accuracy of the new score
-            if(topFive[i].getAccuracy() < currentGameStats.getAccuracy()){
-                topFive[i] = currentGameStats; //switch the current score and the new one
-            }
-        }
-        //sort the top five array using quiksort
-        topFive = quikSort(topFive, 0, topFive.length-1);
-        //run a for loop in order to convert the array into a string so that it can be put on leaderboard wall
-        for (int i = 0; i < 5; i++) {
-            output += i + ": + topFive[i].getAccuracy() + "\n;
-        }
-        //text box for leaderboard wall
-        BitmapText leaderboard = new BitmapText(guiFont,false);
-        leaderboard.setText(output);
-        //cuztomize leaderboard wall text
-        leaderboard.rotate(0,degToRad90 * 2,0);
-        leaderboard.setSize(0.5f);
-        leaderboard.setLocalTranslation(-5,12,-24);
-        //attach credits text to node
-        rootNode.attachChild(leaderboard);*/
     
     //node to hold spatials that can be shot
     private Node shootables;
@@ -206,13 +185,21 @@ public class Main extends SimpleApplication implements ActionListener {
         //attach credits text to node
         rootNode.attachChild(credits);
         
-        
         state = new BitmapText(guiFont, false);
         state.setText("Endless");
         state.setSize(2f);
         state.setLocalTranslation(24,16,0);
         state.rotate(0,-degToRad90, 0);
         rootNode.attachChild(state);
+        
+        leaderboard = new BitmapText(guiFont,false);
+        leaderboard.setText(output);
+        //cuztomize leaderboard wall text
+        leaderboard.rotate(0,degToRad90 * 2,0);
+        leaderboard.setSize(0.5f);
+        leaderboard.setLocalTranslation(-5,12,-24);
+        //attach credits text to node
+        rootNode.attachChild(leaderboard);
     }
     
     /**
@@ -245,13 +232,13 @@ public class Main extends SimpleApplication implements ActionListener {
             bText.setLocalTranslation(2,1.5f,0);
         } else if (direction.equals("+z")) {
             bText.setLocalTranslation(-2,0,0);
-            bText.rotate(0f,degToRad90 * 2,0f); //rotate the text
+            bText.rotate(0f,degToRad90 * 2,0f); //rotate the text to face the origin
         } else if (direction.equals("-x")) {
             bText.setLocalTranslation(2,0,4);
-            bText.rotate(0f,degToRad90,0f); //rotate the text
+            bText.rotate(0f,degToRad90,0f); //rotate the text to face the origin
         } else if (direction.equals("+x")) {
             bText.setLocalTranslation(-2,0,-4);
-            bText.rotate(0f,-degToRad90,0f); //rotate the text
+            bText.rotate(0f,-degToRad90,0f); //rotate the text to face the origin
         }
         return container; //return node with button
     }
@@ -318,6 +305,22 @@ public class Main extends SimpleApplication implements ActionListener {
         if (targetsHit >=50 && challengeMode) {
             challengeMode = false;
             
+            //run this code everytime a 50 round game ends
+            StatEntry currentGameStats = new StatEntry(targetsHit,shotsFired,(targetsHit/shotsFired)*100);
+            
+            //sort the user stats
+            quikSort(userStats);
+            
+            //get the top 5 scores from user stats
+            for (int i = 0; i < 5; i++) {
+                output += i + ":" + userStats.get(i).getAccuracy() + "\n";
+            }
+            //text box for leaderboard wall
+            
+            leaderboard.setText(output);
+            
+            targetsHit = 0;
+            shotsFired = 0;
         }
         //if the user wants to shoot
         //waiting until the click ends avoids multiple inputs
