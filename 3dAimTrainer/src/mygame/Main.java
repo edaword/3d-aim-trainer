@@ -217,6 +217,9 @@ public class Main extends SimpleApplication implements ActionListener {
         readData();
     }
     
+    /**
+     * Read in data from a data file
+     */
     private void readData() {
         try{
             //set up connection to data file containing the top scores
@@ -238,15 +241,22 @@ public class Main extends SimpleApplication implements ActionListener {
         }
     }
     
+    /**
+     * Write to a data file
+     */
     private void writeData() {
         try {
+            //set up connection to file
             FileOutputStream fOut = new FileOutputStream(System.getProperty("user.dir") + "/save.txt");
+            //create file writer to writer to file
             PrintWriter pw = new PrintWriter(fOut);
+            //use for each loop to iterate through the array list
             for (StatEntry stat : userStats) {
+                //for each statentry in the arraylist print the shots fired to the data file
                 pw.println(stat.getShotsFired());
             }
-        } catch (Exception e) {
-            System.out.println(e);
+        } catch (Exception e) { //if an error occurs
+            System.out.println(e); //print error
         }
         
     }
