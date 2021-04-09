@@ -3,10 +3,8 @@ package mygame;
 /*
 Asad Jiwani & Edward Wang
 April 5th, 2021
-This class contains the main class for the program. 
-It also contains all the code for the game
+This class contains the main class for the program, as well as, all the code for the game
 */
-
 
 import java.io.InputStream;
 import java.io.FileOutputStream;
@@ -14,7 +12,6 @@ import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.Collections;
 import com.jme3.app.SimpleApplication;
 import com.jme3.audio.AudioData.DataType;
 import com.jme3.audio.AudioNode;
@@ -41,7 +38,6 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
-import java.io.FileNotFoundException;
 
  
 public class Main extends SimpleApplication implements ActionListener {
@@ -85,7 +81,7 @@ public class Main extends SimpleApplication implements ActionListener {
     //displays the top 5 scores
     private BitmapText leaderboard;
     //the string that BitmapText leaderboard contains;
-    String output = "Leaderboard:\n";
+    private String output = "Leaderboard:\n";
     //testing sorting method
     private static ArrayList<StatEntry> test = new ArrayList<StatEntry>();
 
@@ -230,7 +226,7 @@ public class Main extends SimpleApplication implements ActionListener {
         //read the data currently in the data file
         //invoking this method will add data to the userStats arraylist
         readData();
-        /*use a for loop to iterate through each elements of the array list and get
+        /*use a for loop to iterate through each element of the array list and get
         /shots fired for each entry*/
         for (int i = 0; i < userStats.size(); i++) {
             output += userStats.get(i).getShotsFired();
