@@ -5,7 +5,7 @@ Asad Jiwani & Edward Wang
 April 5th, 2021
 This class contains the main class for the program. 
 It also contains all the code for the game
- */
+*/
 
 import java.text.DecimalFormat;
 import com.jme3.app.SimpleApplication;
@@ -20,7 +20,6 @@ import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
-import com.jme3.font.Rectangle;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
@@ -30,11 +29,12 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
-import com.jme3.renderer.RenderManager;
+import java.util.ArrayList;
 
  
 public class Main extends SimpleApplication implements ActionListener {
@@ -67,15 +67,15 @@ public class Main extends SimpleApplication implements ActionListener {
     private BitmapText hudStats;
     //decimal format for the in game accuracy
     private DecimalFormat twoPoints = new DecimalFormat("0.0%");
-    //create an array of stat entries for the user's top 5 scores
-    private StatEntry[] topFive = new StatEntry[5];
+    //create an array list of stat entries for the user's stats
+    private static ArrayList<StatEntry> userStats = new ArrayList<StatEntry>();
     //an array that holds all the positions of the targets
     private static SpaceDef[][] targetPositions;
     //whether the user is playing the 50 shot challenge or not
     private boolean challengeMode;
     //whether the user is in endless or challenge mode
     private BitmapText state;
-    String output = "Leaderboard:\n";
+
     public static void main(String[] args) {
        //create a 2D array of 5 target positions
        SpaceDef[][] tempTargetPositions5 = {
@@ -90,8 +90,27 @@ public class Main extends SimpleApplication implements ActionListener {
         //start game
         Main app = new Main();
         app.start();
-    }
-    /*//run this code everytime a 50 round game ends
+        
+        /*try{
+            //set up connection to data file containing the top five scores
+            //create Scanner to read data from file
+            File topScores = new File("src\\mygame\\scores.txt");
+            Scanner s = new Scanner(topScores); 
+            //create FileWriter to write to the data file
+            while(s.hasNextLine()){
+                //read in the shots fired in the data file
+                shotsFired = Interger.parseInt(s.nextLine());
+                //create a new StatEntry using the data in the data fie
+                //since the user played challenge mode, targets hit is always 50
+                stat = new StatEntry(50, shotsFired, 50/shotsFired);
+                userStats.add(stat); //add the stat entry to the array list
+            }
+            
+        }catch (IOException e){ //if file not found
+            System.out.println("Error: " + e); //print error
+        }*/
+        
+        /*//run this code everytime a 50 round game ends
         StatEntry currentGameStats = new StatEntry(targetsHit,shotsFired,(targetsHit/shotsFired)*100);
         //only add score to the top 5 if it is better than the current
         for (int i = 0; i < 5; i++) { //use a for loop to compare each score to the new score
@@ -106,6 +125,7 @@ public class Main extends SimpleApplication implements ActionListener {
         for (int i = 0; i < 5; i++) {
             output += i + ": + topFive[i].getAccuracy() + "\n;
         }
+        //write the new best scores to the data file
         //text box for leaderboard wall
         BitmapText leaderboard = new BitmapText(guiFont,false);
         leaderboard.setText(output);
@@ -115,7 +135,9 @@ public class Main extends SimpleApplication implements ActionListener {
         leaderboard.setLocalTranslation(-5,12,-24);
         //attach credits text to node
         rootNode.attachChild(leaderboard);*/
-    
+    }
+
+
     //node to hold spatials that can be shot
     private Node shootables;
 
