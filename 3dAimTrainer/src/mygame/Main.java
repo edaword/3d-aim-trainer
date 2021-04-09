@@ -86,6 +86,8 @@ public class Main extends SimpleApplication implements ActionListener {
     private BitmapText leaderboard;
     //the string that BitmapText leaderboard contains;
     String output = "Leaderboard:\n";
+    //testing sorting method
+    private static ArrayList<StatEntry> test = new ArrayList<StatEntry>();
 
     public static void main(String[] args) {
        //create a 2D array of 5 target positions
@@ -101,6 +103,17 @@ public class Main extends SimpleApplication implements ActionListener {
         //start game
         Main app = new Main();
         app.start();
+        
+        //test code for the quiksort method
+        /*test.add(new StatEntry(50,50));
+        test.add(new StatEntry(50,73));
+        test.add(new StatEntry(50,92));
+        test.add(new StatEntry(50,62));
+        test.add(new StatEntry(50,29));
+        test = quikSort(test,0,test.size()-1);
+        for (int i = 0; i < test.size(); i++) {
+            System.out.println(test.get(i).getShotsFired());
+        }*/
     }
     
     //node to hold spatials that can be shot
@@ -389,10 +402,8 @@ public class Main extends SimpleApplication implements ActionListener {
             for (int i = 0; i < 5; i++) {
                 //assign each shots fired from the stat entry to the output variables
                 output += i + ": " + userStats.get(i).getShotsFired() + "\n";
-                //test purposes
-                System.out.println(output);
             } 
-            //set that text to the leaderboard
+            //set the shots fired from stat entry to the leaderboard
             leaderboard.setText(output);
 
             //reset counts
