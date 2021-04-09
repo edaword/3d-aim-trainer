@@ -73,7 +73,7 @@ public class Main extends SimpleApplication implements ActionListener {
     //text box to hold stats
     private BitmapText hudStats;
     //decimal format for the in game accuracy
-    private DecimalFormat twoPoints = new DecimalFormat("0.0%");
+    private DecimalFormat percentage = new DecimalFormat("0.0%");
     //create an array list of stat entries for the user's stats
     private static ArrayList<StatEntry> userStats = new ArrayList<StatEntry>();
     //an array that holds all the positions of the targets
@@ -84,8 +84,6 @@ public class Main extends SimpleApplication implements ActionListener {
     private BitmapText state;
     //displays the top 5 scores
     private BitmapText leaderboard;
-    //the string that BitmapText leaderboard contains;
-    String output = "Leaderboard:\n";
     //testing sorting method
     private static ArrayList<StatEntry> test = new ArrayList<StatEntry>();
 
@@ -175,7 +173,7 @@ public class Main extends SimpleApplication implements ActionListener {
         hudStats = new BitmapText(guiFont, false);
         hudStats.setSize(guiFont.getCharSet().getRenderedSize() * 4);  
         hudStats.setColor(ColorRGBA.Blue);                             // font color
-        hudStats.setText("Accuracy: " + twoPoints.format((float) targetsHit / shotsFired) + "\nTargets Hit: " + targetsHit + "\nShots Taken: " + shotsFired);
+        hudStats.setText("Accuracy: " + percentage.format((float) targetsHit / shotsFired) + "\nTargets Hit: " + targetsHit + "\nShots Taken: " + shotsFired);
         hudStats.setLocalTranslation(300, hudStats.getLineHeight() * 3, 0); // position
         guiNode.attachChild(hudStats);
         
@@ -218,23 +216,41 @@ public class Main extends SimpleApplication implements ActionListener {
         //attach to node
         rootNode.attachChild(state);
         
+        BitmapText leaderboardTitle = new BitmapText(guiFont,false);
+        leaderboardTitle.setText("Accuracy\nLeaderboard");
+        leaderboardTitle.rotate(0,degToRad90,0);
+        leaderboardTitle.setSize(1.5f);
+        leaderboardTitle.setLocalTranslation(-24,18,0);
+        rootNode.attachChild(leaderboardTitle);
+        
         //create text for the leaderboard wall
         leaderboard = new BitmapText(guiFont,false);
-        leaderboard.setText(output);
         //cuztomize leaderboard wall text
-        leaderboard.rotate(0,degToRad90 * 2,0);
-        leaderboard.setSize(0.5f);
-        leaderboard.setLocalTranslation(-5,12,-24);
+        leaderboard.rotate(0,degToRad90,0);
+        leaderboard.setSize(1f);
+        leaderboard.setLocalTranslation(-24,12,0);
         //attach leaderboard text to node
         rootNode.attachChild(leaderboard);
         //read the data currently in the data file
         //invoking this method will add data to the userStats arraylist
         readData();
-        /*use a for loop to iterate through each elements of the array list and get
-        /shots fired for each entry*/
-        for (int i = 0; i < userStats.size(); i++) {
-            output += userStats.get(i).getShotsFired();
+        updateLeaderboard();
+    }
+    
+    private void updateLeaderboard () {
+        String output = "";
+        quikSort(userStats, 0,userStats.size()-1);
+        /*use a for loop to iterate through each elements of the array list and get the 5 accuracies*/
+        if (userStats.size() >= 5) {
+            for (int i = 0; i < 5; i++) {
+                output += (i+1) + ". " + percentage.format((float)50/userStats.get(i).getShotsFired()) + "\n";
+            }
+        } else {
+            for (int i = 0; i < userStats.size(); i++) {
+                output += (i+1) + ". " + percentage.format((float)50/userStats.get(i).getShotsFired()) + "\n";
+            }
         }
+        
         //set the leaderboard wall text to the shots fired for each stat entry in the arraylist
         leaderboard.setText(output);
     }
@@ -269,7 +285,7 @@ public class Main extends SimpleApplication implements ActionListener {
     private void writeData() {
         try {
             //set up connection to file
-            FileOutputStream fOut = new FileOutputStream(System.getProperty("user.dir") + "/save.txt");
+            FileOutputStream fOut = new FileOutputStream(System.getProperty("user.dir") + "/scores.txt");
             //create file writer to writer to file
             PrintWriter pw = new PrintWriter(fOut);
             //use for each loop to iterate through the array list
@@ -394,17 +410,15 @@ public class Main extends SimpleApplication implements ActionListener {
             //add it to the arrayList of userStats
             userStats.add(currentGameStats);
             //sort the user stats
-            quikSort(userStats, 0,userStats.size()-1);
+            
+            updateLeaderboard();
+            
             //write the new records to the data file
             writeData();
 
-            //get the top 5 scores from user stats
-            for (int i = 0; i < 5; i++) {
-                //assign each shots fired from the stat entry to the output variables
-                output += i + ": " + userStats.get(i).getShotsFired() + "\n";
-            } 
-            //set the shots fired from stat entry to the leaderboard
-            leaderboard.setText(output);
+            
+            
+            state.setText("Endless");
 
             //reset counts
             targetsHit = 0;
@@ -455,7 +469,7 @@ public class Main extends SimpleApplication implements ActionListener {
             
         }
         //update stats in real time
-        hudStats.setText("Accuracy: " + twoPoints.format((float) targetsHit / shotsFired) + "\nTargets hit: " + targetsHit + "\nShots taken: " + shotsFired);
+        hudStats.setText("Accuracy: " + percentage.format((float) targetsHit / shotsFired) + "\nTargets hit: " + targetsHit + "\nShots taken: " + shotsFired);
         if (challengeMode) {
             state.setText("Challenge mode:\n" + (50 - targetsHit) + " targets left!"); 
         }
