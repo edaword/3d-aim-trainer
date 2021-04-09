@@ -348,14 +348,14 @@ public class Main extends SimpleApplication implements ActionListener {
         //if the user has hit 50 targets, the game ends
         if (targetsHit >=50 && challengeMode) {
             challengeMode = false;
-            
+
             //run this code everytime a 50 round game ends
             //store their stats from this round
             StatEntry currentGameStats = new StatEntry(targetsHit,shotsFired,(targetsHit/shotsFired)*100);
             //add it to the arrayList userStats
             userStats.add(currentGameStats);
             //sort the user stats
-//            quikSort(userStats, 0,userStats.size()-1);
+           quikSort(userStats, 0,userStats.size()-1);
             
             writeData();
 
@@ -538,7 +538,7 @@ public class Main extends SimpleApplication implements ActionListener {
             if (i <= j) { //if the left side is less than or equal to the j value
                 Collections.swap(a,left,right); //swap the two entries
                 i++; //increase left side
-                j--; //increase right side
+                j--; //decrease right side
             }
         }
         //recursive call
