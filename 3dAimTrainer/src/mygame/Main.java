@@ -38,6 +38,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
+import java.io.FileInputStream;
 
  
 public class Main extends SimpleApplication implements ActionListener {
@@ -266,8 +267,9 @@ public class Main extends SimpleApplication implements ActionListener {
         try{
             //set up connection to data file containing the top scores
             //create Scanner to read data from file
-            InputStream in = Main.class.getResourceAsStream("scores.txt");
-            Scanner s = new Scanner(in); 
+//            InputStream in = Main.class.getResourceAsStream(System.getProperty("user.dir") + "/scores.txt");
+            FileInputStream fIn = new FileInputStream(System.getProperty("user.dir") + "/scores.txt");
+            Scanner s = new Scanner(fIn); 
             //while there is data in the file
             while(s.hasNextLine()){
                 //read in the shots fired in the data file
@@ -276,6 +278,9 @@ public class Main extends SimpleApplication implements ActionListener {
                 //since the user played challenge mode, targets hit is always 50
                 StatEntry stat = new StatEntry(50, shotsFired, (50/shotsFired)*100);
                 userStats.add(stat); //add the stat entry to the array list
+            }
+            for(StatEntry stat : userStats) {
+                System.out.println(stat);
             }
             
         }catch (Exception e){ //if file not found
@@ -297,6 +302,7 @@ public class Main extends SimpleApplication implements ActionListener {
                 //for each statentry in the arraylist print the shots fired to the data file
                 pw.println(stat.getShotsFired());
             }
+            pw.close();
         } catch (Exception e) { //if an error occurs
             System.out.println(e); //print error
         }
@@ -403,29 +409,6 @@ public class Main extends SimpleApplication implements ActionListener {
     } else if (binding.equals("Jump")) { //if the user wants to jump
       if (isPressed) { player.jump(new Vector3f(0,20f,0));} //write code to allow user to jump
     } else if (binding.equals("Shoot") && !isPressed) {
-        //if the user has hit 50 targets, the game ends
-        if (targetsHit >= 50 && challengeMode) {
-            challengeMode = false;
-
-            //run this code everytime a 50 round game ends
-            //store their stats from this round
-            //since theyplayed a 50 round game, targets hit is always 50
-            StatEntry currentGameStats = new StatEntry(50,shotsFired,(50/shotsFired)*100);
-            //add it to the arrayList of userStats
-            userStats.add(currentGameStats);
-            //sort the user stats
-            updateLeaderboard();
-            
-            //write the new records to the data file
-            writeData();
-            
-            state.setText("Endless");
-
-            //reset counts
-            targetsHit = 0;
-            shotsFired = 0;
-            
-        }
         //if the user wants to shoot
         //waiting until the click ends avoids multiple inputs
         //play the gunshot sound
@@ -469,6 +452,31 @@ public class Main extends SimpleApplication implements ActionListener {
             }
             
         }
+        
+        //if the user has hit 50 targets, the game ends
+        if (targetsHit >= 50 && challengeMode) {
+            challengeMode = false;
+
+            //run this code everytime a 50 round game ends
+            //store their stats from this round
+            //since theyplayed a 50 round game, targets hit is always 50
+            StatEntry currentGameStats = new StatEntry(50,shotsFired,(50/shotsFired)*100);
+            //add it to the arrayList of userStats
+            userStats.add(currentGameStats);
+            //sort the user stats
+            updateLeaderboard();
+            
+            //write the new records to the data file
+            writeData();
+            
+            state.setText("Endless");
+
+            //reset counts
+            targetsHit = 0;
+            shotsFired = 0;
+            
+        }
+        
         //update stats in real time
         hudStats.setText("Accuracy: " + percentage.format((float) targetsHit / shotsFired) + "\nTargets hit: " + targetsHit + "\nShots taken: " + shotsFired);
         if (challengeMode) {
