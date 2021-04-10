@@ -1,5 +1,4 @@
 # 3d-aim-trainer
----
 An aim trainer in java with openGL for our ICS4U final project.
 
 ## Installation  
