@@ -188,7 +188,7 @@ public class Main extends SimpleApplication implements ActionListener {
         //write code to create/customize intro wall text
         BitmapText title = new BitmapText(guiFont,false);
         title.setSize(2); //set font size
-        title.setText("3D AIM TRAINER");
+        title.setText("3D AIM TRAINER\nBy: gg studios");
         //center it on the wall
         title.setLocalTranslation(-4,16,-24);
         //add it to the scene
