@@ -2,9 +2,6 @@
 An aim trainer in Java with OpenGL for our ICS4U final project.
 
 ## Installation  
- $ git clone https://github.com/edaword/3d-aim-trainer.git  
- $ cd 3d-aim-trainer/3dAimTrainer/dist/  
-   run MyGame.jar
 ```
 $ git clone https://github.com/edaword/3d-aim-trainer.git  
 $ cd 3d-aim-trainer/3dAimTrainer/dist/  
