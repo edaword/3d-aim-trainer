@@ -1,4 +1,5 @@
 package mygame;
+import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
@@ -11,8 +12,9 @@ A target has a position, dimensions, a boolean that controls whether it is hit, 
  */
 
 public class BoxTarget extends AbstractTarget{
-    private Box box;
-    private Geometry box1;
+    private String name;
+    private Box tempBox;
+    private Geometry box;
     private SpaceDef dimensions;
     private SpaceDef pos;
     private ColorRGBA color;
@@ -23,13 +25,24 @@ public class BoxTarget extends AbstractTarget{
      * @param dimensions - the dimensions for the box target
      * @param color - the color of the box target
      */
-    public BoxTarget(SpaceDef pos, SpaceDef dimensions, ColorRGBA color){
+    public BoxTarget(String name, SpaceDef pos, SpaceDef dimensions, ColorRGBA color){
+        this.name = name;
         this.pos = pos;
         this.dimensions = dimensions;
         this.color = color;
-        box = new Box(dimensions.getX(),dimensions.getY(),dimensions.getZ());
-        box1 = new Geometry("Box", box);
-        box1.setLocalTranslation(pos.getX(),pos.getY(),pos.getZ());
+        tempBox = new Box(dimensions.getX(),dimensions.getY(),dimensions.getZ());
+        box = new Geometry(name, tempBox);
+        //load material data from asset folder
+//        Material mat1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+//        //set the color of the material
+//        mat1.setColor("Color", color);
+//        //attach the material to the cube
+//        cube.setMaterial(mat1);
+        box.setLocalTranslation(pos.getX(),pos.getY(),pos.getZ());
+    }
+    
+    public Geometry getGeometry() {
+        return box;
     }
     
     /**
@@ -71,7 +84,7 @@ public class BoxTarget extends AbstractTarget{
      */
     @Override
     public BoxTarget clone(){
-        BoxTarget clone = new BoxTarget(pos, dimensions, color);
+        BoxTarget clone = new BoxTarget(name, pos, dimensions, color);
         return clone;
     }
     

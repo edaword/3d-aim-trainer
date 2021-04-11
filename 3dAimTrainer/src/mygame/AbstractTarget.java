@@ -10,6 +10,7 @@ a boolean that controls whether it is hit, and a color
 
 public abstract class AbstractTarget {
     protected SpaceDef pos;
+    //whether the target is hit or not
     protected boolean hit;
     protected ColorRGBA color;
     protected SpaceDef dimensions;

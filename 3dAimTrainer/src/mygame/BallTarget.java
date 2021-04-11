@@ -12,8 +12,9 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Sphere;
 
 public class BallTarget extends AbstractTarget{
-    private Sphere ball;
-    private Geometry ball1;
+    private String name;
+    private Sphere tempBall;
+    private Geometry ball;
     private float radius;
     private int zSamples;
     private int radialSamples;
@@ -22,16 +23,19 @@ public class BallTarget extends AbstractTarget{
     /**
      * Primary constructor - accept new values for the position, radius, and color of the target
      * @param pos - the position of the target
-     * @param radius - the radiius of the target
+     * @param radius - the radius of the target
      * @param color - the color of the target
      */
-    public BallTarget(SpaceDef pos, float radius, ColorRGBA color) {
+    public BallTarget(String name, SpaceDef pos, float radius, ColorRGBA color) {
+        this.name = name;
         this.pos = pos;
         this.radius = radius;
         this.color = color;
         zSamples = 30;
         radialSamples = 30;
-        ball = new Sphere(zSamples, radialSamples, radius);
+        tempBall= new Sphere(zSamples, radialSamples, radius);
+        ball = new Geometry(name, tempBall);
+	ball.setLocalTranslation(pos.getX(),pos.getY(),pos.getZ());
     }
     
     /**
@@ -43,13 +47,17 @@ public class BallTarget extends AbstractTarget{
      * @param radialSamples - the radial of the target
      * @param color - the color of the target
      */
-    public BallTarget(SpaceDef pos, float radius, int zSamples, int radialSamples, ColorRGBA color) {
-        this(pos, radius, color);
+    public BallTarget(String name, SpaceDef pos, float radius, int zSamples, int radialSamples, ColorRGBA color) {
+        this(name, pos, radius, color);
 	this.zSamples = zSamples;
 	this.radialSamples = radialSamples;
-	ball = new Sphere(zSamples,radialSamples, radius);
-        ball1 = new Geometry("Ball", ball);
-	ball1.setLocalTranslation(pos.getX(),pos.getY(),pos.getZ());
+	tempBall = new Sphere(zSamples,radialSamples, radius);
+        ball = new Geometry(name, tempBall);
+	ball.setLocalTranslation(pos.getX(),pos.getY(),pos.getZ());
+    }
+    
+    public Geometry getGeometry() {
+        return ball;
     }
         
     /**
@@ -114,7 +122,7 @@ public class BallTarget extends AbstractTarget{
      * @return a new ball target with same attributes as this one
      */
     public BallTarget clone() {
-        BallTarget b1 = new BallTarget(pos, radius, color);
+        BallTarget b1 = new BallTarget(name, pos, radius, color);
         return b1;
     }
 }

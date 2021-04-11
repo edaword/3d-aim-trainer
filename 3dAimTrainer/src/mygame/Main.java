@@ -3,10 +3,10 @@ package mygame;
 /*
 Asad Jiwani & Edward Wang
 April 5th, 2021
-This class contains the main class for the program, as well as, all the code for the game
+This class contains the main method for the program, as well as, all the code for the game
 */
 
-import java.io.InputStream;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
@@ -38,11 +38,11 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
-import java.io.FileInputStream;
 
  
 public class Main extends SimpleApplication implements ActionListener {
     //create variable that holds te value of 90 degrees in radian form
+    //the rotate function uses radians, but degrees are much more intuitive while coding
     static final float degToRad90 = 1.570796f;
     //the mesh of the scene
     private Spatial sceneModel;
@@ -81,6 +81,8 @@ public class Main extends SimpleApplication implements ActionListener {
     private BitmapText state;
     //displays the top 5 scores
     private BitmapText leaderboard;
+    //shape of targets
+    private String targetShape;
 
     //testing sorting method
     private static ArrayList<StatEntry> test = new ArrayList<StatEntry>();
@@ -99,17 +101,6 @@ public class Main extends SimpleApplication implements ActionListener {
         //start game
         Main app = new Main();
         app.start();
-        
-        //test code for the quiksort method
-        /*test.add(new StatEntry(50,50));
-        test.add(new StatEntry(50,73));
-        test.add(new StatEntry(50,92));
-        test.add(new StatEntry(50,62));
-        test.add(new StatEntry(50,29));
-        test = quikSort(test,0,test.size()-1);
-        for (int i = 0; i < test.size(); i++) {
-            System.out.println(test.get(i).getShotsFired());
-        }*/
     }
     
     //node to hold spatials that can be shot
@@ -122,57 +113,75 @@ public class Main extends SimpleApplication implements ActionListener {
     public void simpleInitApp() {
         //the user has not started the 50 shot challenge yet
         challengeMode = false;
-        //set counter variables to 0
-        shotsFired = 0;
-        targetsHit = 0;
+        
+        //set target shape
+        targetShape = "box";
         
         //set rotation speed for camera (mouse sensitivity)
         flyCam.setRotationSpeed(1);
         
-        /** Set up Physics */
+        /** Set up Bullet Physics */
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
         
-        // We re-use the flyby camera for rotation, while positioning is handled by physics
+        // set the sky to blue
         viewPort.setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
-//        flyCam.setMoveSpeed(100);
-        initCrossHairs(); // a "+" in the middle of the screen to help aiming
+        // a "+" in the middle of the screen to help aiming
+        initCrossHairs(); 
+        //set up keyboard input
         setUpKeys();
         //invoke method to initialize the audio soundeffects
         initAudio();
-    //light is already done
-//        setUpLight();
 
-        //load scene from asset folder and add code to control/make scene
+        //load scene from asset folder
         sceneModel = assetManager.loadModel("Scenes/MyScene.j3o");
+        //create a mesh of that scene for collision detection
         CollisionShape sceneShape = CollisionShapeFactory.createMeshShape(sceneModel);
+        //create a physics controller with that mesh
         landscape = new RigidBodyControl(sceneShape, 0);
+        //add it to the scene model
         sceneModel.addControl(landscape);
         
         //add code to cuztomize the player in the game
+        //the collision shape of the player is a pill shape
+        //this helps avoid getting stuck in the ground in the variable terrain
         CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1.5f, 6f, 1);
+        //add that mesh to the player object
         player = new CharacterControl(capsuleShape, 0.05f);
+        //sets movement attributes
         player.setJumpSpeed(20);
         player.setFallSpeed(30);
+        //add it to the scene
         rootNode.attachChild(sceneModel);
+        //add the mesh of both the scene and the player collision shape to the physics engine
         bulletAppState.getPhysicsSpace().add(landscape);
         bulletAppState.getPhysicsSpace().add(player);
         
+        //set the gravity of the player to -30 units vertically
         player.setGravity(new Vector3f(0,-30f,0));
+        //move the player a bit above the ground to avoid clipping
         player.setPhysicsLocation(new Vector3f(0,10,0));
         
-        //create a new node for the users shots
+        //create a new node for objects which can be shot
         shootables = new Node("Shootables");
-        rootNode.attachChild(shootables); //attach node to main node
-        //start with a single target in the middle
-        shootables.attachChild(makeCube("target", targetPositions[2][2], ColorRGBA.Orange));
+        rootNode.attachChild(shootables); //attach node to the scene
+        //start with a single target in the middle, 
+        //the default shape is box
+        if (targetShape.equals("box")) {
+            shootables.attachChild(makeCube("target", targetPositions[2][2], new SpaceDef(0.5f,0.5f,0.5f), ColorRGBA.Orange));
+        } else if (targetShape.equals("ball")) {
+            shootables.attachChild(makeBall("target", targetPositions[2][2], 0.5f, ColorRGBA.Orange));
+        }
+        
        
         //displays stats in real time
         hudStats = new BitmapText(guiFont, false);
-        hudStats.setSize(guiFont.getCharSet().getRenderedSize() * 4);  
-        hudStats.setColor(ColorRGBA.Blue);                             // font color
+        //the size of the text scales with screeen height
+        hudStats.setSize((float)(settings.getHeight() /25f));  
+        hudStats.setColor(ColorRGBA.Blue); // font color
         hudStats.setText("Accuracy: " + percentage.format((float) targetsHit / shotsFired) + "\nTargets Hit: " + targetsHit + "\nShots Taken: " + shotsFired);
         hudStats.setLocalTranslation(300, hudStats.getLineHeight() * 3, 0); // position
+        //add it to the gui node (a special 2d node that doesn't move)
         guiNode.attachChild(hudStats);
         
         //display the intro wall
@@ -180,7 +189,9 @@ public class Main extends SimpleApplication implements ActionListener {
         BitmapText title = new BitmapText(guiFont,false);
         title.setSize(2); //set font size
         title.setText("3D AIM TRAINER");
+        //center it on the wall
         title.setLocalTranslation(-4,16,-24);
+        //add it to the scene
         rootNode.attachChild(title);
 
         //create nodes for the buttons on intro wall
@@ -190,7 +201,8 @@ public class Main extends SimpleApplication implements ActionListener {
         //create buttons for the users options on intro wall
         buttons.attachChild(makeButton("Endless", new SpaceDef(0,4,-24), "-z"));
         buttons.attachChild(makeButton("50 Shot Challenge", new SpaceDef(0,6,-24), "-z"));
-        
+        buttons.attachChild(makeButton("Target shape: balls", new SpaceDef(-20,4,-24), "-z"));
+        buttons.attachChild(makeButton("Target shape: boxes", new SpaceDef(-20,6,-24), "-z"));
         //text box for credits wall
         BitmapText credits = new BitmapText(guiFont,false);
         credits.setText("Credits!!\nThis game was created by: Edward Wang & Asad Jiwani\nApril 8th 2021"
@@ -203,8 +215,9 @@ public class Main extends SimpleApplication implements ActionListener {
         //attach credits text to node
         rootNode.attachChild(credits);
         
-        //create text to show if the user chose endless mode
+        //create text to show the user what gameMode they're playing
         state = new BitmapText(guiFont, false);
+        //default is endless
         state.setText("Endless");
         //cuztomize text
         state.setSize(2f);
@@ -239,19 +252,28 @@ public class Main extends SimpleApplication implements ActionListener {
         
         //set the leaderboard wall text to the shots fired for each stat entry in the arraylist
         updateLeaderboard();
+        
+        //set counter variables to 0
+        shotsFired = 0;
+        targetsHit = 0;
     }
     /**
      * Update the leaderboard wall to include new stats after the user finished a game
      */
     private void updateLeaderboard () {
+        //the text that the leaderboard will show
         String output = "";
+        //first, sort the leaderboard
         quikSort(userStats, 0, userStats.size()-1);
-        //use a for loop to iterate through each element of the array list and get the 5 number of shots fired
+        //use a for loop to iterate through each element of the array list and get the top 5 accuracies
+        //if there's more than 5 records
         if (userStats.size() >= 5) {
             for (int i = 0; i < 5; i++) {
+                //add each record to the output
                 output += (i+1) + ". " + percentage.format((float)50/userStats.get(i).getShotsFired()) + "\n";
             }
         } else {
+            //if there's less, then add all the records (prevents nullPointer)
             for (int i = 0; i < userStats.size(); i++) {
                 output += (i+1) + ". " + percentage.format((float)50/userStats.get(i).getShotsFired()) + "\n";
             }
@@ -266,9 +288,8 @@ public class Main extends SimpleApplication implements ActionListener {
     private void readData() {
         try{
             //set up connection to data file containing the top scores
-            //create Scanner to read data from file
-//            InputStream in = Main.class.getResourceAsStream(System.getProperty("user.dir") + "/scores.txt");
             FileInputStream fIn = new FileInputStream(System.getProperty("user.dir") + "/scores.txt");
+            //create Scanner to read data from file
             Scanner s = new Scanner(fIn); 
             //while there is data in the file
             while(s.hasNextLine()){
@@ -278,9 +299,6 @@ public class Main extends SimpleApplication implements ActionListener {
                 //since the user played challenge mode, targets hit is always 50
                 StatEntry stat = new StatEntry(50, shotsFired, (50/shotsFired)*100);
                 userStats.add(stat); //add the stat entry to the array list
-            }
-            for(StatEntry stat : userStats) {
-                System.out.println(stat);
             }
             
         }catch (Exception e){ //if file not found
@@ -295,13 +313,14 @@ public class Main extends SimpleApplication implements ActionListener {
         try {
             //set up connection to file
             FileOutputStream fOut = new FileOutputStream(System.getProperty("user.dir") + "/scores.txt");
-            //create file writer to writer to file
+            //create file writer to file
             PrintWriter pw = new PrintWriter(fOut);
             //use for each loop to iterate through the array list
             for (StatEntry stat : userStats) {
-                //for each statentry in the arraylist print the shots fired to the data file
+                //for each statentry in the arraylist write the shots fired to the data file
                 pw.println(stat.getShotsFired());
             }
+            //finish the output
             pw.close();
         } catch (Exception e) { //if an error occurs
             System.out.println(e); //print error
@@ -310,7 +329,7 @@ public class Main extends SimpleApplication implements ActionListener {
     }
     
     /**
-     * Make a button on the screen
+     * Make a button and a text element beside it on the screen
      * @param text - the text to display on the button
      * @param pos - the position of the button
      * @param direction - the direction of the button
@@ -326,15 +345,14 @@ public class Main extends SimpleApplication implements ActionListener {
         bText.setText(text);
         bText.setColor(ColorRGBA.Red);
         bText.setSize(2);
-        //make cubes so that the user has something to shoot
-        Geometry cube = makeCube(text, new SpaceDef(0,0,0), ColorRGBA.Red);
-        //add an identical (but transparent) cube at the same position in the 
-        //  shootables node so the user can click it.
-        shootables.attachChild(makeCube(text, pos, new ColorRGBA(0f,0f,0f,0f)));
-        container.attachChild(cube);
+        //make a cube so that the user has something to shoot
+        container.attachChild(makeCube(text,new SpaceDef(0,0,0), new SpaceDef(0.5f,0.5f,0.5f), ColorRGBA.Red));
+        //add an identical (but transparent) cube at the same position in the shootables node so the user can click it.
+        shootables.attachChild(makeCube(text,new SpaceDef(pos.getX(),pos.getY(),pos.getZ()), new SpaceDef(0.5f,0.5f,0.5f), new ColorRGBA(0f,0f,0f,0f)));
+
         //attach text to cube
         container.attachChild(bText);
-        //set the location of the text based on the direction parameter
+        //set the location & direction of the text based on the direction parameter
         if (direction.equals("-z")) {
             bText.setLocalTranslation(2,1.5f,0);
         } else if (direction.equals("+z")) {
@@ -396,7 +414,7 @@ public class Main extends SimpleApplication implements ActionListener {
   }
   
   /** These are our custom actions triggered by key presses.
-   * We do not walk yet, we just keep track of the direction the user pressed. */
+   * We use this to keep track of the direction the user pressed. */
   public void onAction(String binding, boolean isPressed, float tpf) {
     if (binding.equals("Left")) { //if the user wants to go left
       left = isPressed;
@@ -407,7 +425,9 @@ public class Main extends SimpleApplication implements ActionListener {
     } else if (binding.equals("Down")) { //if the user wants to go down
       down = isPressed;
     } else if (binding.equals("Jump")) { //if the user wants to jump
-      if (isPressed) { player.jump(new Vector3f(0,20f,0));} //write code to allow user to jump
+      if (isPressed) { 
+          player.jump(new Vector3f(0,20f,0));
+        }
     } else if (binding.equals("Shoot") && !isPressed) {
         //if the user wants to shoot
         //waiting until the click ends avoids multiple inputs
@@ -415,18 +435,20 @@ public class Main extends SimpleApplication implements ActionListener {
         gunshot.playInstance();
         //add one to the total shots counter
         shotsFired++;
-        // 1. Reset the results. CollisionResults is an arrayList of objects of type CollisionResult
+        // Reset the results. CollisionResults is an arrayList of objects of type CollisionResult
         CollisionResults results = new CollisionResults();
-        // 2. Draw a ray from the camera location in the camera direction
+        // Draw a ray from the camera location in the camera direction
         Ray ray = new Ray(cam.getLocation(), cam.getDirection());
-        // 3. Collect intersections between the Ray and objects in the shootables node in results list.
+        // Collect intersections between the Ray and objects in the shootables node in results list.
         shootables.collideWith(ray, results);
-        // 5. If something was hit
+        // If something was hit
         if (results.size() > 0) {
             ding.playInstance(); //play ding sound effect
             // The closest collision point is what was truly hit:
             CollisionResult closest = results.getClosestCollision();
+            //save the name of that object for easy use
             String closestID = closest.getGeometry().getName();
+            //if a target was hit
             if (closestID.equals("target")) {
                 //add one to the num targets hit counter
                 targetsHit++;
@@ -434,7 +456,7 @@ public class Main extends SimpleApplication implements ActionListener {
                 shootables.detachChild(closest.getGeometry());
                 //make a new target in a random position
                 newTarget();
-            } else if (closestID.equals("Endless")) {
+            } else if (closestID.equals("Endless")) {//if the endless button was hit
                 //if the user clicked the endless button
                 ///quit challenge mode
                 challengeMode = false;
@@ -442,19 +464,29 @@ public class Main extends SimpleApplication implements ActionListener {
                 shotsFired = 0;
                 targetsHit = 0;
                 state.setText("Endless");
-                
-            } else if (closestID.equals("50 Shot Challenge")) {
+            } else if (closestID.equals("50 Shot Challenge")) {//if the challengeMode button was hit
                 //enter or stay in challenge mode
                 challengeMode = true;
-                //the shot doesn't count
+                //reset stats
                 shotsFired = 0;
                 targetsHit = 0;
+            } else if (closestID.equals("Target shape: balls")) {//if the targetShape to balls was hit
+                //set the targetShape to ball
+                targetShape = "ball";
+                //the shots doesn't count
+                shotsFired--;
+            } else if (closestID.equals("Target shape: boxes")) {//if the targetShape to boxes was hit
+                //set the targetShape to box
+                targetShape = "box";
+                //the shots doesn't count
+                shotsFired--;
             }
             
         }
         
         //if the user has hit 50 targets, the game ends
         if (targetsHit >= 50 && challengeMode) {
+            //stop challengeMode
             challengeMode = false;
 
             //run this code everytime a 50 round game ends
@@ -469,6 +501,7 @@ public class Main extends SimpleApplication implements ActionListener {
             //write the new records to the data file
             writeData();
             
+            //set the mode text back to endless
             state.setText("Endless");
 
             //reset counts
@@ -478,7 +511,8 @@ public class Main extends SimpleApplication implements ActionListener {
         }
         
         //update stats in real time
-        hudStats.setText("Accuracy: " + percentage.format((float) targetsHit / shotsFired) + "\nTargets hit: " + targetsHit + "\nShots taken: " + shotsFired);
+        hudStats.setText("Accuracy: " + percentage.format((float) targetsHit / shotsFired) + "\nTargets Hit: " + targetsHit + "\nShots Taken: " + shotsFired);
+        //tell the user how many targets are left while in challengeMode
         if (challengeMode) {
             state.setText("Challenge mode:\n" + (50 - targetsHit) + " targets left!"); 
         }
@@ -488,13 +522,18 @@ public class Main extends SimpleApplication implements ActionListener {
    * Create a new target for the user to shoot
    */
   public void newTarget() {
-      //position variables for target
-      int xPos, yPos;
-      //randomize position for target
-      xPos = (int) (Math.random() * (targetPositions.length));
-      yPos = (int) (Math.random() * (targetPositions.length));
-      //attach to node
-      shootables.attachChild(makeCube("target", targetPositions[xPos][yPos], ColorRGBA.Orange));
+    //position variables for target
+    int xPos, yPos;
+    //randomize position for target
+    xPos = (int) (Math.random() * (targetPositions.length));
+    yPos = (int) (Math.random() * (targetPositions.length));
+    if (targetShape.equals("ball")) {
+        shootables.attachChild(makeBall("target", targetPositions[xPos][yPos], 0.5f, ColorRGBA.Orange));
+    } else if (targetShape.equals("box")) {
+      //make a new target at a random spot and attach it to shootables
+      shootables.attachChild(makeCube("target", targetPositions[xPos][yPos], new SpaceDef(0.5f,0.5f,0.5f), ColorRGBA.Orange));
+    }
+      
   }
 
   /**
@@ -506,11 +545,14 @@ public class Main extends SimpleApplication implements ActionListener {
    */
   @Override
     public void simpleUpdate(float tpf) {
+        //get the direction the camera is looking in
+        //returns a vector of length 3
         camDir.set(cam.getDirection()).multLocal(0.6f);
         camLeft.set(cam.getLeft()).multLocal(0.4f);
         //prevents user from flying (walking in the vertical direction)
         camDir.setY(0);
         camLeft.setY(0);
+        //reset walking direction
         walkDirection.set(0, 0, 0);
         //create a new walking direction for the player based on where they wanna go
         if (left) { //if we want to go left
@@ -528,22 +570,19 @@ public class Main extends SimpleApplication implements ActionListener {
         player.setWalkDirection(walkDirection);//set the walking direction of the player
         cam.setLocation(player.getPhysicsLocation()); //set location of the camera
     }
-
-    @Override
-    public void simpleRender(RenderManager rm) {
-        //TODO: add render code
-    }
     
     /** A centered plus sign to help the player aim. */
     protected void initCrossHairs() { 
+        //don't display performance stats (e.g frameBuffers, Shaders)
         setDisplayStatView(false);
         //load font from assets folder
         guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
         //create and cuztomize crosshair font
         BitmapText ch = new BitmapText(guiFont, false);
+        //set the size of the crosshair
         ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
         ch.setText("+"); // create + shape crosshair
-        ch.setLocalTranslation( // center
+        ch.setLocalTranslation( // center the crosshair
           settings.getWidth() / 2 - ch.getLineWidth()/2,
           settings.getHeight() / 2 + ch.getLineHeight()/2, 0);
         guiNode.attachChild(ch); //attach to node
@@ -556,17 +595,28 @@ public class Main extends SimpleApplication implements ActionListener {
      * @param color - the color of the cube
      * @return the cube made for target practice
      */
-    protected Geometry makeCube(String name, SpaceDef pos, ColorRGBA color) {
-        Box box = new Box(0.5f, 0.5f, 0.5f); //create box using built in methods
-        //create new geomtery using the box above
-        Geometry cube = new Geometry(name, box);
-        //move the geometry to new location
-        cube.setLocalTranslation(pos.getX(), pos.getY(), pos.getZ());
-        //load data from asset folder
+    protected Geometry makeCube(String name, SpaceDef pos, SpaceDef dimensions, ColorRGBA color) {
+        //make a new boxTarget with the specified parameters
+        BoxTarget box = new BoxTarget(name,pos,dimensions,color);
+        //load material data from asset folder
         Material mat1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat1.setColor("Color", color); //randomize color of cube
-        cube.setMaterial(mat1);
-        return cube; //return the cube
+        //set the color of the material
+        mat1.setColor("Color", color);
+        //attach the material to the cube
+        box.getGeometry().setMaterial(mat1);
+        return box.getGeometry(); //return the target
+    }
+    
+    protected Geometry makeBall(String name, SpaceDef pos, float radius, ColorRGBA color) {
+        //make a new ballTarget with the specified parameters
+        BallTarget ball = new BallTarget(name,pos,radius,color);
+        //load material data from the asset folder
+        Material mat1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        //set the color of the material
+        mat1.setColor("Color", color);
+        //attach the material to the ball
+        ball.getGeometry().setMaterial(mat1);
+        return ball.getGeometry(); //return the ball
     }
     
     /**
